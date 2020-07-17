@@ -165,7 +165,7 @@ module.exports = {
     "fontSize": "26rpx",
     "borderRadius": "10rpx",
     "borderWidth": "1rpx",
-    "borderColor": "#e1dee4",
+    "borderColor": "#EEEEEE",
     "borderStyle": "solid"
   },
   "ellipsis_one": {
