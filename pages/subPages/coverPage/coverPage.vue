@@ -23,6 +23,9 @@
 			}
 		},
 		onShow() {
+			uni.showLoading({
+				title:'加载中...'
+			})
 			this.getAlertData()
 		},
 		onHide() {
@@ -71,6 +74,7 @@
 				param.cityCode = uni.getStorageSync('location') ? JSON.parse(uni.getStorageSync('location')).adcode : ''
 
 				this.$request('/api/view/getAlertOrCover','post',param).then(res => {
+					uni.hideLoading()
 					if(res.code == 200 && res.data.titleImg){
 						this.showTimer = true
 						this.dataObj = res.data
@@ -128,8 +132,8 @@
 		flex: 1;
 		flex-basis: 80rpx;
 		.img{
-			width: 600rpx;
-			height: 200rpx;
+			width: 400rpx;
+			height: 100rpx;
 		}
 	}
 }

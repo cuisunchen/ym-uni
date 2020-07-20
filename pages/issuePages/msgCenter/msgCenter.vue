@@ -54,6 +54,8 @@
 						}else{
 							this.msgLists = res.data
 						}
+					}else{
+						this.showToast(res.msg)
 					}
 				})
 			},

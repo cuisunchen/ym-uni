@@ -12,6 +12,7 @@
 				<view class="status">发布时间: <text style="color: #4f8f24;">{{item.releaseTime}}等</text></view>
 			</view>
 		</view>
+		<view class="reson flex" v-if="item.status == '已驳回' || item.status == '已下架'"><text class="label">驳回理由:</text> <text class="flex1" style="color: red;">{{item.groundsViolation || '暂无'}}</text></view>
 	</view>
 </template>
 
@@ -56,6 +57,8 @@
 .issueCard{
 	border-radius: 10rpx;
 	overflow: hidden;
+	padding-bottom: 20rpx;
+	background-color: #fff;
 	.title{
 		color: #fff;
 		line-height: 80rpx;
@@ -63,8 +66,8 @@
 		background-color: #B4C386;
 	}
 	.con{
-		padding: 26rpx 20rpx;
-		background-color: #fff;
+		padding: 26rpx 20rpx 0;
+		
 		.imgBox{
 			width: 170rpx;
 			height: 170rpx;
@@ -83,6 +86,14 @@
 					margin-left: 14rpx;
 				}
 			}
+		}
+	}
+	.reson{
+		color: #333;
+		margin-top: 10rpx;
+		padding: 0 20rpx;
+		.label{
+			margin-right: 10rpx;
 		}
 	}
 }

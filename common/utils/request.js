@@ -20,6 +20,7 @@ const request = (url, method='post', data, hasToken="true") => {
 						dataType: 'json',
 						header: headers
 				}).then(res => {
+					uni.hideLoading()
 						if ((res[1].data.code && res[1].data.code == 200) || res[1].data.code == 999 
 								|| res[1].data.code == 500|| res[1].data.code == 555) {
 							resolve(res[1].data)
@@ -47,7 +48,10 @@ const request = (url, method='post', data, hasToken="true") => {
 						}
 				}).catch(parmas => {
 					console.log('错误')
-		　　　　　reject(response)
+					uni.showToast({
+						title:'连接失败,请检查网络是否正常'
+					})
+		　　　　reject(response)
 		　　})
 		})
 		return promise	

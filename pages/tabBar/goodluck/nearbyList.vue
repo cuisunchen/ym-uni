@@ -1,9 +1,8 @@
 <template>
-	<scroll-view scroll-y class="nearbyList">
-		<view class="" v-for="item in 100" :key="item">
-			1343759723458阿斯顿发见到过{{item}}
-		</view>
-		<!-- <view class="recommendBox">
+	<scroll-view scroll-y :refresher-enabled="true" :refresher-triggered="triggered" refresher-threshold
+				 @scrolltolower="infiniteScroll" class="nearbyList" 
+				@refresherrefresh="refresh">
+		<view class="recommendBox">
 			<recommend-list :is-title-show="false" :data-obj="recommendList" @click="goDetail"></recommend-list>
 		</view>
 		
@@ -14,7 +13,7 @@
 		<div class="nodata flex-column align-center" v-if="list.length == 0">
 				<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
 				<view class="desc">暂无数据</view>
-		</div> -->
+		</div>
 	</scroll-view>
 </template>
 
@@ -26,23 +25,44 @@
 				recommendList: [],
 				pullupLoadingType:'more',
 				param:{
-					"typeId": '1',
-					"cityCode": '440306',
+					"typeId": '3',
+					"cityCode": '',
 					"pagesNum": 1,
 					"pageSize": 8
 				},
+				triggered: false,
+				isFresh: false
 			}
 		},
-		onLoad() {
-			console.log('nationwide onLoad')
+		created() {
+			this.isFresh = false
+			// #ifdef APP-PLUS
+			this.param.cityCode = this.$parent.cityCode
+			// #endif
+			// #ifdef H5
+			this.param.cityCode = 440306
+			// #endif
 			this.getGoodLuckTask()
 			this.getRecommendData()
 		},
 		methods:{
+			userClick(item,index){
+				let param = {homeAdId : item.homeAdId}
+				this.$request('/api/userClick','post',param).then(res => {
+					if(res.code != 200){
+						this.showToast(res.msg || res.data)
+						return
+					}
+					item.clickNum ++
+					this.$set(this.list,index,item)
+				})
+			},
 			getGoodLuckTask(type){
 				this.$request('/api/view/goodLuckTask','post',this.param).then(res => {
 					uni.hideLoading()
 					if(res.code == 200){
+						this.triggered = false
+						this.isFresh = false
 						if(type == 'loadmore'){
 							this.list.push(...res.data.homeAdList)
 						}else{
@@ -73,7 +93,7 @@
 				var strRegex = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)"; 
 				let re=new RegExp(strRegex);
 				if (!re.test(data.bigImg)) {
-					this.showToast('详情页地址有误,请联系客服1')
+					this.showToast('详情页地址有误,请联系客服')
 					return
 				}
 				this.userClick(data)
@@ -94,13 +114,52 @@
 				uni.navigateTo({
 					url: "../../subPages/details/details?param=" + encodeURIComponent(JSON.stringify(data))
 				})
-			}
+			},
+			refresh() {
+				if(this.isFresh){return}
+				this.triggered = true
+				this.param.pageSize = 10
+				this.param.pagesNum = 1
+				this.pullupLoadingType = 'more'
+				this.getGoodLuckTask('refresh')
+			},
+			infiniteScroll() {
+				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
+					uni.showModal({
+						title:'提示',
+						content:'等级不足,邀请好友提升等级,可展示更多广告,获取更多收益!',
+						confirmText:'去分享',
+						success: (res)=> {
+							if (res.confirm) {
+									uni.navigateTo({
+										url:'../../subPages/download/download'
+									})
+							}
+						}
+					})
+					return
+				}
+				if(this.pullupLoadingType == 'noMore'){return}
+				this.param.pagesNum ++
+				this.pullupLoadingType = 'loading'
+				this.getGoodLuckTask('loadmore')
+			},
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.nearbyList{
-		
+		height: 100%;
+		.nodata{
+			 margin-top: 100rpx;
+			 .img{
+					width: 150rpx;
+					height: 150rpx;
+			 }
+			 .desc{
+					color: #999;
+			 }
+		}
 	}
 </style>

@@ -2,7 +2,7 @@
 	<view class="swiperExamplePage">
 		<view class="title flex align-center"><text class="label">{{pageTit}}</text> <text>- 点击查看详情</text></view>
 		<view class="imgWrap flex all-center">
-			<image src="../../../../static/other/sle@2x.png" mode="" @click="goDetail"></image>
+			<image :src="dataObj.homeTopImgUrl" mode="" @click="goDetail"></image>
 		</view>
 		<view class="con">
 			<view class="card">
@@ -27,7 +27,7 @@
 			return {
 				pageTit:'示例',
 				dataObj:{
-					titleImg:'../../../../static/other/sle@2x.png',
+					homeTopImgUrl:'../../../../static/other/sle@2x.png',
 					bigImg:'../../../static/other/content@2x.png',
 				}
 			}
@@ -36,6 +36,7 @@
 			if(opt.type == 'preview'){
 				this.pageTit = '效果如下'
 				this.dataObj = JSON.parse(decodeURIComponent(opt.pageData))
+				console.log()
 			}
 		},
 		methods: {

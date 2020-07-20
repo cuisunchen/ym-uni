@@ -16,9 +16,9 @@
 		</view>		
 		<movable-area scale-area  v-else>
 				<movable-view class="movable-view" direction="all" @scale="onScale" scale="true" scale-min="0.5" scale-max="4" :scale-value="scaleValue">
-						<!-- <image src="图片路径" mode="widthFix"></image> -->
+						<!-- <image src="图片路径" mode="aspectFill"></image> -->
 						<view class="imgWrap" ref="imgWrap" :style="{height: boxHeight + 'px',width:'100%'}">
-							<image class="img" :src="dataObj.bigImg" mode="widthFix" @load="imgLoad" @dblclick="dblclick"></image>
+							<image class="img" :src="dataObj.bigImg" mode="aspectFill" @load="imgLoad" @dblclick="dblclick"></image>
 						</view>
 						
 				</movable-view>

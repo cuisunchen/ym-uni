@@ -24,12 +24,15 @@
 			return {
 				content:'',
 				imageUrl:'',
-				adId:''
+				adId:'',
+				timer:null
 			}
 		},
 		onLoad(opt) {
-			console.log(opt)
 			this.adId = opt.id
+		},
+		onUnload() {
+			clearTimeout(this.timer)
 		},
 		methods: {
 			submit(){
@@ -43,6 +46,11 @@
 						this.showToast(res.data)
 						this.content = ''
 						this.imgUrl = ''
+						this.timer = setTimeout(()=>{
+							uni.navigateBack({
+								delta:1
+							})
+						},1500)
 					}else{
 						this.showToast(res.msg)
 					}

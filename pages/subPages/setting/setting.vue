@@ -1,10 +1,12 @@
 <template>
 	<view class="settingPage page">
 		<view class="cellsWrap">
-			<cell icon-path="../../../static/gw.png" title="官网" desc="- http://www.guangyi009.com" right-text="" :is-icon-show="false"></cell>
-			<cell icon-path="../../../static/xcx.png" title="小程序" desc="- 小程序搜索米圈日记" desc-color="red" :is-icon-show="false"></cell>
-			<cell icon-path="../../../static/gw1.png" title="官方微信" desc="- youmi" right-text="" :is-icon-show="false"></cell>
-			<cell icon-path="../../../static/xq.png" title="设置兴趣" desc="- 根据兴趣推送广告" border-bottom-color="transparent" @click="goSubPage"></cell>
+			<cell v-for="(item,index) in lists" :key="index" :icon-path="item.iconUrl"  :desc-color="item.color"
+					:title="item.title" :desc="item.desc" :is-icon-show="item.isIconShow" @click="itemClick(item)"></cell>
+			<!-- <cell icon-path="../../../static/gw.png" title="官网" desc="" :is-icon-show="false" @click="copy"></cell> -->
+			<!-- <cell icon-path="../../../static/xcx.png" title="小程序" desc="" desc-color="red" :is-icon-show="false"></cell> -->
+			<!-- <cell icon-path="../../../static/gw1.png" title="官方微信" desc="" :is-icon-show="false"></cell> -->
+			<!-- <cell icon-path="../../../static/xq.png" title="设置兴趣" desc="" border-bottom-color="transparent" @click="goSubPage"></cell> -->
 		</view>
 		
 		<view class="btn">
@@ -19,6 +21,36 @@
 		comments:{cell},
 		data() {
 			return {
+				lists:[
+					{
+						 iconUrl: '../../../static/gw.png',
+						 title: '官网',
+						 color: '',
+						 isIconShow: false,
+						 copyText:'',
+						 desc: '- http://www.guangyi009.com'
+					},{
+						 iconUrl: '../../../static/xcx.png',
+						 title: '小程序',
+						 color: 'red',
+						 isIconShow: false,
+						 copyText:'',
+						 desc: '- 小程序搜索米圈日记'
+					},{
+						 iconUrl: '../../../static/gw1.png',
+						 title: '官方微信',
+						 color: '',
+						 isIconShow: false,
+						 copyText:'',
+						 desc: '- youmi'
+					},{
+						 iconUrl: '../../../static/xq.png',
+						 title: '设置兴趣',
+						 color: '',
+						 isIconShow: true,
+						 desc: '- 根据兴趣推送广告'
+					}
+			  ]
 			}
 		},
 		computed: {
@@ -27,22 +59,47 @@
 				'checked_hobbys_name'
 			]),
 		},
+		onLoad() {
+			this.getInfo()
+		},
 		methods: {
+			itemClick(e){
+				console.log(e.copyText)
+				if(e.title == '设置兴趣'){
+					uni.navigateTo({
+						url:'../interest/interest'
+					})
+					return
+				}
+				uni.setClipboardData({
+					data: e.copyText,
+					success: () =>{
+						this.showToast('复制成功')
+					}
+				});
+			},
+			getInfo(){
+				 this.$request('/api/view/appInfo','get',{}).then(res=>{
+						if(res.code == 200){
+							 this.lists[0].desc = '- ' + res.data.guanWang
+							 this.lists[0].copyText = res.data.guanWang
+							 this.lists[1].desc = '- 小程序搜索' + res.data.xiaoChengXu
+							 this.lists[1].copyText = res.data.xiaoChengXu
+							 this.lists[2].desc = '- ' + res.data.guanWechat
+							 this.lists[2].copyText = res.data.guanWechat
+							 console.log(this.lists)
+						}
+				 })
+			},
 			logout(){
 				this.$request('/api/loginOut','',{}).then(res=>{
 					if(res.code == 200){
-						// uni.clearStorage()
 						uni.removeStorageSync('token');
 						uni.removeStorageSync('userInfo');
 						uni.reLaunch({
 							url: '../login/login'
 						})
 					}
-				})
-			},
-			goSubPage(){
-				uni.navigateTo({
-					url:'../interest/interest'
 				})
 			},
 		}

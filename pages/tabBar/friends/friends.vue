@@ -1,63 +1,60 @@
 <template>
-	<view class="friendEarnPage page">
-		<ygc-refresh class="lists"
-		    @onRefresh="refresh">
-				<view class="top">
-					<view class="friendsNum">您邀请到{{myInfo.friend}}位好友</view>
-					<view class="profitBox flex align-center">
-						<uni-tag :text="myInfo.le" size="small" type="error"></uni-tag>
-						<text class="profit">
-							 今日共给您带来收益:{{myInfo.friendAmount}}元
-						</text>
-					</view>
+	<view class="friendEarnPage page flex-column">
+		<view class="top">
+			<view class="friendsNum">您邀请到{{myInfo.friend}}位好友</view>
+			<view class="profitBox flex align-center">
+				<uni-tag :text="myInfo.le" size="small" type="error"></uni-tag>
+				<text class="profit">
+					 今日共给您带来收益:{{myInfo.friendAmount}}元
+				</text>
+			</view>
+		</view>
+		
+		<view class="rankingBox">
+			<view class="rankingWrap">
+				<view class="rank">昨日收益排名 <text>NO1</text></view>
+				<view class="userInfo flex align-center">
+					 <image class="img" src="../../../static/huangguan@2x.png" alt="" srcset=""></image>
+					 <text class="mobile">{{noOneInfo.phone}}</text>
+					 <text class="tag">LV.{{noOneInfo.level}}</text>
 				</view>
-				
-				<view class="rankingBox">
-					<view class="rankingWrap">
-						<view class="rank">昨日收益排名 <text>NO1</text></view>
-						<view class="userInfo flex align-center">
-							 <image class="img" src="../../../static/huangguan@2x.png" alt="" srcset=""></image>
-							 <text class="mobile">{{noOneInfo.topPhone}}</text>
-							 <text class="tag">LV.5</text>
-						</view>
-						<view class="con flex">
-							 <view class="friendsNum flex align-center"><text>好友数量:</text> <text class="num">{{noOneInfo.friendNum}}人</text></view>
-							 <view class="income flex align-center" >
-									<text>收益金额:</text> <text class="num">{{noOneInfo.makeMoney}}元</text>
-							 </view>
-						</view>
-						<view class="shareBox flex">
-							<view class="img">
-								<image src="../../../static/xiaox.png" mode=""></image>
-							</view>
-							<view class="notice flex1">
-								<uni-notice-bar scrollable="true" :speed="50" text="分享应用邀请好友,好友每天的收益,您都有对应的返利,为您当日的米圈收益~~~"></uni-notice-bar>
-							</view>
-							<view class="shareBtn" @click="goShare">去分享</view>
-						</view>
-					</view>
+				<view class="con flex">
+					 <view class="friendsNum flex align-center"><text>好友数量:</text> <text class="num">{{noOneInfo.friendSum}}人</text></view>
+					 <view class="income flex align-center" >
+							<text>收益金额:</text> <text class="num">{{noOneInfo.amount}}元</text>
+					 </view>
 				</view>
-				
-				<view class="main flex1">
-					<view class="title flex flex-between">
-						<text>- 今日米圈收益明细</text> 
-						<text class="rateTxt">当前返利比: <text class="rate">{{myInfo.rebackRate}}%</text></text>
+				<view class="shareBox flex">
+					<view class="img">
+						<image src="../../../static/xiaox.png" mode=""></image>
 					</view>
-					
-					<view class="lists">
-						<view class="item flex align-center" v-for="(item,index) in friendsList" :key='index'>
-							 <view class="index flex all-center">{{index+1}}</view>
-							 <view class="flex1">
-									<friendListItem :data-obj="item"/> 
-							 </view>
-						</view>
-						<view class="nodata flex-column align-center" v-if="friendsList.length == 0">
-							<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
-							<view class="desc">暂无数据</view>
-						</view>
+					<view class="notice flex1">
+						<uni-notice-bar scrollable="true" :speed="50" text="分享应用邀请好友,好友每天的收益,您都有对应的返利,为您当日的米圈收益~~~"></uni-notice-bar>
 					</view>
-				</view>	
-		</ygc-refresh>
+					<view class="shareBtn" @click="goShare">去分享</view>
+				</view>
+			</view>
+		</view>
+		
+		<view class="main flex1">
+			<view class="title flex flex-between">
+				<text>- 今日米圈收益明细</text> 
+				<text class="rateTxt">当前返利比: <text class="rate">{{myInfo.rebackRate}}%</text></text>
+			</view>
+			
+			<view class="lists">
+				<view class="item flex align-center" v-for="(item,index) in friendsList" :key='index'>
+					 <view class="index flex all-center">{{index+1}}</view>
+					 <view class="flex1">
+							<friendListItem :data-obj="item"/> 
+					 </view>
+				</view>
+				<view class="nodata flex-column align-center" v-if="friendsList.length == 0">
+					<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
+					<view class="desc">暂无数据</view>
+				</view>
+			</view>
+		</view>	
 	</view>
 </template>
 
@@ -82,11 +79,18 @@
 			})
 			this.getDatas()
 		},
+		onPullDownRefresh() {
+			this.refresh()
+		},
 		methods: {
 			getDatas(){
 				Promise.all([this.getNoOneInfo(),this.getFriendList()]).then(res =>{
 					uni.hideLoading()
-					this.noOneInfo = res[0]
+					uni.stopPullDownRefresh();
+					let arr = res[0].list.sort((item1,item2) => {
+						 return item2.amount - item1.amount
+					})
+					this.noOneInfo = arr[0]
 					this.friendsList = res[1].friendList
 					this.myInfo = res[1].userInfo
 					if(res[1].userInfo.level == 1){
@@ -105,7 +109,7 @@
 			},
 			getNoOneInfo(){
 				return new Promise((resolve,reject) => {
-					this.$request('/api/view/friendTopUser','get',{}).then(res => {
+					this.$request('/api/view/leaderboard','get',{}).then(res => {
 						if(res.code == 200){
 							resolve(res.data)
 						}else{

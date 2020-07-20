@@ -1,7 +1,7 @@
 <template>
 	<view class="orderDetailPage">
 		<view class="wrap flex-column">
-			<view class="title flex all-center flex-shrink">订单编号: {{pageData.orderNumber}}</view>
+			<view class="title flex all-center flex-shrink">订单编号: {{pageData.orderNum}}</view>
 			<view class="con flex-column">
 				<view class="orderInfo flex flex-shrink">
 					<view class="imageBox">

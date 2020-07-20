@@ -2,6 +2,12 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
+		let token = uni.getStorageSync('token')
+		if(!token){
+			uni.reLaunch({
+				url:'pages/subPages/login/login'
+			})
+		}
 		// #ifdef APP-NVUE
 		plus.screen.lockOrientation('portrait-primary');   //  控制app竖屏正方向锁死
 		// #endif

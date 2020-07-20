@@ -49,6 +49,7 @@
 						 title: '请选择答案再提交',
 						 icon: 'none',
 						 duration: 2000,
+						 position: 'bottom'
 					})
 					return
 				}
@@ -70,7 +71,8 @@
 								uni.showToast({
 									 title: '回答正确,您将获得收益'+res.data.money+'元,请前往[我的]页面查看收益详情',
 									 icon: 'none',
-									 duration: 1500,
+									 duration: 2000,
+									 position: 'bottom'
 								})
 						  }
 						}else if(res.code == 500){
@@ -82,27 +84,31 @@
 									uni.showToast({
 										 title: '此广告已完成,不能再回答',
 										 icon: 'none',
-										 duration: 1500,
+										 duration: 2000,
+										 position: 'bottom'
 									})
 							 }
 							 if(res.data.message == '已回答'){
 									uni.showToast({
 										 title: '您已回答过,不能再回答',
 										 icon: 'none',
-										 duration: 1500,
+										 duration: 2000,
+										 position: 'bottom'
 									})
 							 }else if(res.data.message == '已下架'){
 									uni.showToast({
 										 title: '此广告已下架,不能再回答',
 										 icon: 'none',
-										 duration: 1500,
+										 duration: 2000,
+										 position: 'bottom'
 									})
 							 } 
 						}else if(res.code == 999){
 							uni.showToast({
 								 title: res.msg + ',不能再回答',
 								 icon: 'none',
-								 duration: 1500,
+								 duration: 2000,
+								 position: 'bottom'
 							})
 						}
 						let paras = {'data':this.dataObj,'index':this.dataIndex}

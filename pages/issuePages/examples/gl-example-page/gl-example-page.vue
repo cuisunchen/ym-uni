@@ -46,6 +46,7 @@
 			if(opt.type == 'preview'){
 				this.pageTit = '效果如下'
 				this.dataObj = JSON.parse(decodeURIComponent(opt.pageData))
+				this.dataObj.maxReward = String(Number(this.dataObj.maxReward)*2/3).substring(0,4)
 			}
 		},
 		methods: {

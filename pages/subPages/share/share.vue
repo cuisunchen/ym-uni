@@ -1,6 +1,6 @@
 <template>
 	<view class="sharePage page">
-		<image class="img" src="../../../static/other/share01@2x.png" mode="widthFix"></image>
+		<image class="img" src="../../../static/other/share01@2x.png" mode="aspectFill"></image>
 	</view>
 </template>
 <script>

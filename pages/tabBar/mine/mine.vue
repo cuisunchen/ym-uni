@@ -63,7 +63,10 @@
 				userInfo:{}
 			}
 		},
-		onShow() {
+		onLoad() {
+			uni.showLoading({
+				title:'加载中'
+			})
 			this.getUserInfo()
 		},
 		onPullDownRefresh() {

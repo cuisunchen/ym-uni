@@ -1,9 +1,19 @@
 {
 	"pages": [
 		{
+		    "path" : "pages/subPages/coverPage/coverPage",
+		    "style" : {
+					"app-plus": {
+						"bounce": "vertical",
+						"titleNView": false
+					}
+				}
+		},
+		{
 		  "path" : "pages/tabBar/home/home",
 		  "style" : {
 				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": true,
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -63,6 +73,7 @@
 			"path" : "pages/tabBar/friends/friends",
 			"style" : {
 				"navigationBarTitleText": "米圈",
+				"enablePullDownRefresh": true,
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -206,6 +217,7 @@
 				"path" : "pages/subPages/collectionAD/collectionAD",
 				"style" : {
 					"navigationBarTitleText": "收藏",
+					"enablePullDownRefresh": true,
 					"app-plus": {
 						"bounce": "none",
 						"titleNView": {
@@ -599,19 +611,11 @@
 							}
 						}
 				}
-        ,{
-            "path" : "pages/subPages/coverPage/coverPage",
-            "style" : {
-							"app-plus": {
-								"bounce": "vertical",
-								"titleNView": false
-							}
-						}
-        }
+        
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "今日友米",
 		"navigationBarBackgroundColor": "#2c405a",
 		"backgroundColor": "#f6f6f6"
 	},

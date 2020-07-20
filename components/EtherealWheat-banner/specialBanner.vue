@@ -19,7 +19,7 @@
 		<!-- 4.padding值也需要根据不同项设定不同值，但理同justifyContent -->
         <div class="image-container" :class="{onlyOne: bannerList.length == 1}" v-if="bannerList.length == 1">
           <image :src="item.picture" 
-            class="slide-image" 
+            class="slide-image"  mode="aspectFill"
             :style="{
               transform: curIndex===i?'scale(' + scaleX + ',' + scaleY + ')':'scale(1,1)',
               transitionDuration: '.3s',
@@ -29,7 +29,7 @@
 				
 				<div class="image-container" v-else
 					:class="[curIndex===0?((i===listLen-1)?'item-left':(i===1?'item-right':'item-center')):(curIndex===listLen-1?(i===0?'item-right':(i===listLen-2?'item-left':'item-center')):(i===curIndex-1?'item-left':(i===curIndex+1?'item-right':'item-center')))]">
-          <image :src="item.picture" 
+          <image :src="item.picture"   mode="aspectFill"
             class="slide-image" 
             :style="{
               transform: curIndex===i?'scale(' + scaleX + ',' + scaleY + ')':'scale(1,1)',

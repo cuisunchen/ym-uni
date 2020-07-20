@@ -3,11 +3,11 @@
 		<view class="info flex align-center">
 			<view class="peoples box">
 				<text class="label">用户总数:</text>
-				<text class="num"> 100005人</text>
+				<text class="num"> {{totalPeople}}人</text>
 			</view>
 			<view class="priceBox box"> 
 				<text class="label">费用说明:</text>
-				<text class="price"> 0.10 元/条</text>
+				<text class="price"> {{unitPrice}} 元/天</text>
 			</view>
 		</view>
 		
@@ -48,6 +48,8 @@
 			return {
 				netUrl:'',
 				imgTit:'轮播',
+				totalPeople:null,
+				unitPrice:'',
 				form:{
 					"homeTopImgUrl": "",
 					"homeBigImgUrl": "",
@@ -148,8 +150,24 @@
 			},
 			submitRequest(){
 				this.$request('/api/release','post',this.form).then(res => {
-					console.log(res)
+					// console.log(res)
 					if(res.code == 200){
+						if(uni.getSystemInfoSync().platform == 'android'){
+							uni.showModal({
+								title:"是否确定支付",
+								content:`需支付金额: ${res.data.amount}元`,
+								confirmText:'残忍拒绝',
+								cancelText:'朕去支付',
+								success:(re) => {
+									if(re.cancel){
+										this.userPayAd(res.data.homeAdId)
+									} else if (res.confirm) {
+										console.log('用户点击取消');
+									}
+								}
+							})
+							return
+						}
 						uni.showModal({
 							title:"是否确定支付",
 							content:`需支付金额: ${res.data.amount}元`,
@@ -173,25 +191,31 @@
 						    provider: 'alipay',
 						    orderInfo: res.data, //微信、支付宝订单数据
 						    success: (res) => {
-						    	let rawdata = JSON.parse(res.rawdata)
-						    	let result = JSON.parse(rawdata.result)
+									let rawdata = JSON.parse(res.rawdata)
 						    	this.topImgClear = true
 						    	this.conImgClear = true
 						    	this.set_chooseDays([])
-						    	ths.initForm()
-						    	if(rawdata.resultStatus == '9000' && result.code == 10000 && result.msg == "Success"){
-						    		uni.showModal({
-						    			title:'恭喜您,订单支付成功!',
-						    			content:'如有疑问,请联系客服',
-						    			showCancel:false,
-						    			success: () => {
-						    				uni.navigateBack({
-						    					delta:1
-						    				})
-						    			}
-						    		})
-						    	}
-						    	// this.initForm()
+									if(rawdata.resultStatus == '9000'){
+										uni.showModal({
+											title:'恭喜您,订单支付成功!',
+											content:'如有疑问,请联系客服',
+											showCancel:false,
+											success: () => {
+												uni.navigateBack({
+													delta:1
+												})
+											}
+										})
+									}else
+									if(rawdata.resultStatus == '8000'){
+										this.showToast('订单处理中,请稍等片刻!')
+									}else
+									if(rawdata.resultStatus == '4000'){
+										this.showToast('订单支付失败')
+									}else
+									if(rawdata.resultStatus == '6002'){
+										this.showToast('网络连接出错')
+									}
 						    },
 						    fail: (err)=> {
 						    	uni.showModal({
@@ -204,7 +228,6 @@
 						    			})
 						    		}
 						    	})
-						    	console.log('fail:' + JSON.stringify(err));
 						    }
 						});
 					}
@@ -218,10 +241,16 @@
 			},
 			goTimePage(){
 				let url = ''
+				let param = {
+					totalPeople: this.totalPeople,
+					unitPrice: this.unitPrice,
+					homeType:this.form.homeType,
+					cityCode: 0
+				}
 				if(this.chooseDays.length > 0){
-					url = '../issue-time-list/issue-time-list?isEdit=true'
+					url = '../issue-time-list/issue-time-list?isEdit=true&param='+encodeURIComponent(JSON.stringify(param))
 				}else{
-					url = '../issue-time-list/issue-time-list?isEdit=false'
+					url = '../issue-time-list/issue-time-list?isEdit=false&param='+encodeURIComponent(JSON.stringify(param))
 				}
 				uni.navigateTo({
 					url
@@ -236,8 +265,8 @@
 			goPreview(){
 				let obj = {
 					homeTopImgUrl: this.form.homeTopImgUrl,
-					homeBigImgUrl: this.form.homeBigImgUrl || this.netUrl,
-					bigImg: this.form.homeBigImgUrl || this.netUrl,
+					homeBigImgUrl: this.netUrl || this.form.homeBigImgUrl,
+					bigImg: this.netUrl || this.form.homeBigImgUrl,
 				}
 				let res = this.checkPublic(obj)
 				if(!res){
@@ -257,13 +286,13 @@
 			},
 			getReleasePrice(){
 				let param = {
-					"homeAdType": 8,
+					"homeAdType": this.form.homeType,
 					"rangType": 1
 				}
 				this.$request('/api/releasePrice','post',param).then(res=>{
 					if(res.code == 200){
 						this.totalPeople = res.data.peopleTotal
-						this.unitPrice = res.data.adUnitPrice
+						this.unitPrice = res.data.initialPrice
 					}
 				})
 			},

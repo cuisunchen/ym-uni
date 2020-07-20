@@ -8,10 +8,10 @@
 			</view>
 		</view>
 		
-		<image :src="obj.homeTopImgUrl || obj.imgUrl" mode="widthFix" @click="goDetail"></image>
+		<image class="imgBox" :src="obj.homeTopImgUrl || obj.imgUrl" mode="aspectFill" @click="goDetail"></image>
 		
 		<view class="flex1 flex all-center">
-			<image src="../../../../static/umi@2x.png" mode=""></image>
+			<image src="../../../../static/tip02@2x.png" mode=""></image>
 		</view>
 		
 		<uni-popup ref="popup" type="bottom">
@@ -39,7 +39,7 @@
 		data() {
 			return {
 				obj:{
-					imgUrl: "../../../../static/other/sfe@2x.png",
+					homeTopImgUrl: "../../../../static/other/sfe@2x.png",
 					bigImg: "../../../static/other/content@2x.png"
 				}
 			}
@@ -69,6 +69,7 @@
 
 <style lang="scss" scoped>
 .coverExamplePage{
+	height: 100%;
 	.topHandle{
 		position: fixed;
 		left: 0;
@@ -92,8 +93,9 @@
 			background-color: rgba(0, 0, 0, .4);
 		}
 	}
-	image{
+	.imgBox{
 		width: 100%;
+		flex: 3;
 	}
 	.flex1{
 		image{

@@ -37,7 +37,7 @@
 			
 			<view class="cellBox">
 				<issue-form-cell class="cell" label="发布时间:" :is-time="true" @choose="chooseTime"></issue-form-cell>
-				<issue-form-cell class="cell" label="发布条数:" :issue-num='minNumber' v-model="form.releasesNumber" :is-icon-show="false"></issue-form-cell>
+				<issue-form-cell class="cell" label="发布条数:" :issue-type="issueType" :issue-num='minNumber' v-model="form.releasesNumber" :is-icon-show="false"></issue-form-cell>
 			</view>
 			
 			<view class="tip">
@@ -84,6 +84,7 @@
 	import citysData from '../../../common/utils/citys.js'
 	import popup from '@/components/uni-popup/uni-popup.vue'
 	import { mapGetters, mapMutations } from 'vuex'
+	import { keepTwoDecimalFull } from '@/common/utils/tools.js'
 	export default {
 		components: {issueUploadCard,issueConImgUploadCard,formInput,issueFormCell,levelLinkage,popup},
 		data() {
@@ -181,6 +182,22 @@
 				this.$request('/api/questions','post',this.form).then(res => {
 					uni.hideLoading()
 					if(res.code == 200){
+						if(uni.getSystemInfoSync().platform == 'android'){
+							uni.showModal({
+								title:"是否确定支付",
+								content:`需支付金额: ${res.data.amount}元`,
+								confirmText:'残忍拒绝',
+								cancelText:'朕去支付',
+								success:(re) => {
+									if(re.cancel){
+										this.userPayAd(res.data.homeAdId)
+									} else if (res.confirm) {
+										console.log('用户点击取消');
+									}
+								}
+							})
+							return
+						}
 						uni.showModal({
 							title:"是否确定支付",
 							content:`需支付金额: ${res.data.amount}元`,
@@ -204,12 +221,11 @@
 						    provider: 'alipay',
 						    orderInfo: res.data, //微信、支付宝订单数据
 						    success: (res) => {
-						    	let rawdata = JSON.parse(res.rawdata)
-						    	let result = JSON.parse(rawdata.result)
+									let rawdata = JSON.parse(res.rawdata)
 						    	this.set_checked_hobbys_id('')
 						    	this.set_checked_hobbys_name('')
 						    	this.set_hobby_isCheckAll(false)
-						    	if(rawdata.resultStatus == '9000' && result.code == 10000 && result.msg == "Success"){
+						    	if(rawdata.resultStatus == '9000'){
 						    		uni.showModal({
 						    			title:'恭喜您,订单支付成功!',
 						    			content:'如有疑问,请联系客服',
@@ -220,8 +236,17 @@
 						    				})
 						    			}
 						    		})
+						    	}else
+						    	if(rawdata.resultStatus == '8000'){
+						    		this.showToast('订单处理中,请稍等片刻!')
+						    	}else
+						    	if(rawdata.resultStatus == '4000'){
+						    		this.showToast('订单支付失败')
+						    	}else
+						    	if(rawdata.resultStatus == '6002'){
+						    		this.showToast('网络连接出错')
 						    	}
-						    	// this.initForm()
+									
 						    },
 						    fail: (err)=> {
 						    	uni.showModal({
@@ -311,13 +336,13 @@
 				let obj = {
 					homeTopImgUrl: this.form.homeTopImgUrl,
 					title: this.form.title,
-					homeBigImgUrl:this.form.homeBigImgUrl || this.netUrl,
-					bigImg: this.form.homeBigImgUrl || this.netUrl,
+					homeBigImgUrl:this.netUrl || this.form.homeBigImgUrl,
+					bigImg: this.netUrl || this.form.homeBigImgUrl,
 					tags: '未读',
 					rangeType:'全国',
 					status: '未完成',
 					userGet:'未得',
-					price:'0.30',
+					price:this.unitPrice,
 					clickNum: 0,
 				}
 				let res = this.checkQS(obj)
@@ -345,7 +370,7 @@
 					uni.hideLoading()
 					if(res.code == 200){
 						this.totalPeople = res.data.peopleTotal
-						this.unitPrice = res.data.adUnitPrice
+						this.unitPrice = res.data.initialPrice
 						this.minNumber = res.data.minNumber
 					}
 				})
@@ -383,7 +408,7 @@
 			background-color: #fff;
 			.uploadCard{
 				padding-bottom: 30rpx;
-				border-bottom: 1rpx solid #d3d0d5;
+				border-bottom: 1rpx solid #eee;
 			}
 		}
 		.uplaodTitImgBox{

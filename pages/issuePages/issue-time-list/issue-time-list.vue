@@ -1,15 +1,15 @@
 <template>
 	<view class="issueTimeList flex-column">
 		<view class="info">
-			<view class="title flex all-center">轮播图每天最多发布3条,以确保曝光率</view>
+			<view class="title flex all-center">{{tag}}每天最多发布{{maxNum}}条,以确保曝光率</view>
 			<view class="con flex">
 				<view class="left flex1">
-					<view class=""><text class="label">发布类型: </text><text class="result">轮播型</text></view>
-					<view class=""><text class="label">发布费用: </text><text class="result money">0.10元/天</text></view>
+					<view class=""><text class="label">发布类型: </text><text class="result">{{issuType}}</text></view>
+					<view class=""><text class="label">发布费用: </text><text class="result money">{{param.unitPrice}}元/天</text></view>
 				</view>
 				<view class="right flex1">
-					<view class=""><text class="label">曝光类型: </text><text class="result">全国</text></view>
-					<view class=""><text class="label">曝光人数: </text><text class="result peoples">100009人</text></view>
+					<view class=""><text class="label">曝光类型: </text><text class="result">{{param.rangeName || '全国'}}</text></view>
+					<view class=""><text class="label">曝光人数: </text><text class="result peoples">{{param.totalPeople}}人</text></view>
 				</view>
 			</view>
 		</view>
@@ -42,10 +42,15 @@
 	export default {
 		data() {
 			return {
-				broadcast:'暗示过是大法官地方公开水电费空间规划是的法规和看',
+				tag:'',
+				issuType:'',
+				rangeType:'全国',
+				maxNum: 1,
+				broadcast:'如果当天时间已不可选, 可选择发布问答型广告或好运型广告, 问答和好运广告数量不限, 价格便宜, 且曝光度更高, 用户点击查看率更高',
 				lists:[],
 				chooseDaysList:[],
-				isEdit: 'false'
+				isEdit: 'false',
+				param:{}
 			}
 		},
 		computed: {
@@ -55,9 +60,52 @@
 		},
 		onLoad(opt) {
 			this.isEdit = opt.isEdit
+			this.param = JSON.parse(decodeURIComponent(opt.param))
+			switch (this.param.homeType){
+				case 1:
+					this.tag = '轮播图'
+					this.issuType = '轮播型'
+					this.maxNum = 3
+					break;
+				case 2:
+					this.tag = '封面图'
+					this.issuType = '封面型'
+					this.maxNum = 1
+					break;
+				case 3:
+					this.tag = '弹框型'
+					this.issuType = '弹框型'
+					this.maxNum = 1
+					break;
+				case 4: 
+					this.tag = '推荐型'
+					this.issuType = '首页-今日推荐'
+					this.maxNum = 3
+					break;
+				case 5:
+						this.tag = '推荐型'
+						this.issuType = '好运-全国推荐'
+						this.maxNum = 3
+						break;
+				case 6:
+						this.tag = '推荐型'
+						this.issuType = '好运-同城推荐'
+						this.rangeType = '同城'
+						this.maxNum = 3
+						break;
+				case 7:
+						this.tag = '推荐型'
+						this.issuType = '好运-附近推荐'
+						this.rangeType = '附近(同县/区)'
+						this.maxNum = 3
+						break;
+			}
 			if(this.chooseDays.length > 0){
 				this.chooseDaysList = this.chooseDays
 			}
+			uni.showLoading({
+				title:'加载中...'
+			})
 			this.getTimeList()
 		},
 		onNavigationBarButtonTap() {
@@ -87,11 +135,11 @@
 			},
 			getTimeList(){
 				let param = {
-					  "cityCode": JSON.parse(uni.getStorageSync('location')).adcode,
-						
-					  "homeType": 1
-					}
+					"cityCode": this.param.cityCode,
+					"homeType": this.param.homeType
+				}
 				this.$request('/api/releaseFreeTime','post',param).then(res => {
+					uni.hideLoading()
 					if(res.code == 200){
 						this.lists = res.data.map(item => {
 							let obj = {}
@@ -108,6 +156,8 @@
 							}
 							return obj
 						})
+					}else{
+						this.showToast(res.msg)
 					}
 				})
 			}

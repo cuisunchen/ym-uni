@@ -36,19 +36,19 @@
 			</view>
 			
 			<view class="cellBox">
-				<issue-form-cell class="cell" label="发布总数:" :issue-num='minNumber' v-model="form.releasesNumber" :is-icon-show="false"></issue-form-cell>
+				<issue-form-cell class="cell" label="发布总数:" :issue-type="issueType" :issue-num='minNumber' v-model="form.releasesNumber" :is-icon-show="false"></issue-form-cell>
 				<view class="rewardBox flex">
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">最大奖励:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.maxPrize" placeholder="最低0.10元" placeholder-class="holderClass"/>
+							<input type="number" v-model="form.maxPrize" placeholder="最低0.10元" placeholder-class="inputHold"/>
 						</view>
 					</view>
 					
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">数量:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.maxNum" placeholder="数量(最低1)" placeholder-class="holderClass"/>
+							<input type="number" v-model="form.maxNum" placeholder="数量(最低1)" placeholder-class="inputHold"/>
 						</view>
 					</view>
 				</view>
@@ -56,14 +56,14 @@
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">最低奖励:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.minPrize" placeholder="最低0.10元" placeholder-class="holderClass"/>
+							<input type="number" v-model="form.minPrize" placeholder="最低0.10元" placeholder-class="inputHold"/>
 						</view>
 					</view>
 					
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">数量:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.minNum" placeholder="数量(最低1)" placeholder-class="holderClass"/>
+							<input type="number" v-model="form.minNum" placeholder="数量(最低1)" placeholder-class="inputHold"/>
 						</view>
 					</view>
 				</view>
@@ -255,6 +255,22 @@
 				}
 				this.$request('/api/goodLuck','post',param).then(res => {
 					if(res.code == 200){
+						if(uni.getSystemInfoSync().platform == 'android'){
+							uni.showModal({
+								title:"是否确定支付",
+								content:`需支付金额: ${res.data.amount}元`,
+								confirmText:'残忍拒绝',
+								cancelText:'朕去支付',
+								success:(re) => {
+									if(re.cancel){
+										this.userPayAd(res.data.homeAdId)
+									} else if (res.confirm) {
+										console.log('用户点击取消');
+									}
+								}
+							})
+							return
+						}
 						uni.showModal({
 							title:"是否确定支付",
 							content:`需支付金额: ${res.data.amount}元`,
@@ -279,11 +295,10 @@
 						    orderInfo: res.data, //微信、支付宝订单数据
 						    success: (res) => {
 									let rawdata = JSON.parse(res.rawdata)
-									let result = JSON.parse(rawdata.result)
 									this.set_checked_hobbys_id('')
 									this.set_checked_hobbys_name('')
 									this.set_hobby_isCheckAll(false)
-									if(rawdata.resultStatus == '9000' && result.code == 10000 && result.msg == "Success"){
+									if(rawdata.resultStatus == '9000'){
 										uni.showModal({
 											title:'恭喜您,订单支付成功!',
 											content:'如有疑问,请联系客服',
@@ -294,8 +309,16 @@
 												})
 											}
 										})
+									}else
+									if(rawdata.resultStatus == '8000'){
+										this.showToast('订单处理中,请稍等片刻!')
+									}else
+									if(rawdata.resultStatus == '4000'){
+										this.showToast('订单支付失败')
+									}else
+									if(rawdata.resultStatus == '6002'){
+										this.showToast('网络连接出错')
 									}
-									// this.initForm()
 						    },
 						    fail: (err)=> {
 									uni.showModal({
@@ -384,14 +407,20 @@
 				let obj = {
 					title:this.form.title,
 					homeTopImgUrl:this.form.homeTopImgUrl,
-					homeBigImgUrl:this.form.homeBigImgUrl || this.netUrl,
+					homeBigImgUrl:this.netUrl || this.form.homeBigImgUrl,
+					releasesNumber: this.form.releasesNumber,
+					maxPrize: this.form.maxPrize,
+					maxNum: this.form.maxNum,
+					minPrize: this.form.minPrize,
+					minNum:this.form.minNum,
 					titleImg:this.form.homeTopImgUrl,
-					bigImg:this.form.homeBigImgUrl || this.netUrl,
+					
 					maxReward:this.form.maxPrize,
 					tags:'未读',
 					status:'未完成',
 					clickNum: 0,
-					price: '0.20'
+					probability:this.rate,
+					bigImg:this.netUrl || this.form.homeBigImgUrl,
 				}
 				let res = this.checkGL(obj)
 				if(!res){
@@ -487,6 +516,10 @@
 					.inputBox{
 						margin-left: 16rpx;
 					}
+				}
+				.inputHold{
+					color: #999;
+					font-size: 24rpx;
 				}
 			}
 		}

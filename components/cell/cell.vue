@@ -76,7 +76,7 @@
 			borderBottomColor:{
 				type: String,
 				default(){
-					return '#e6e6e6'
+					return '#eee'
 				}
 			},
 		},

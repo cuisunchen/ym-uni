@@ -57,8 +57,8 @@
 			/deep/ .ymGridItem{
 				box-sizing: border-box;
 				width: calc(100% / 3);
-				border-bottom: 2upx solid rgba(172,172,172,.2);
-				border-right: 2upx solid rgba(172,172,172,.2);
+				border-bottom: 2upx solid #eee;
+				border-right: 2upx solid #eee;
 				text-align: center;
 			}
 		}

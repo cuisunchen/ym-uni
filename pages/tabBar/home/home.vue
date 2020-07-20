@@ -1,8 +1,5 @@
 <template>
-	<view class="homePage page">
-		<ygc-refresh class="lists flex-column"
-		    @onRefresh="refresh" 
-		    @scrolltolower="infiniteScroll">
+	<view class="homePage page flex-column">
 				<view class="page-swiper">
 					<special-banner :banner-list="bannerList" :swiper-config="swiperConfig" 
 						:hasDesc="false" :scaleX="bannerList.length > 2 ? '1.1591': '1.2436'"
@@ -27,7 +24,7 @@
 						<view class="desc">暂无数据</view>
 					</div>
 				</view>
-		</ygc-refresh>
+		<!-- </ygc-refresh> -->
 		
 		<view class="dialoagAD" v-if="isAlertImgShow">
 			<view class="wrap flex-column all-center">
@@ -56,8 +53,8 @@
 					indicatorDots: false,
 					indicatorColor: 'rgba(255, 255, 255, .4)',
 					indicatorActiveColor: 'rgba(255, 255, 255, 1)',
-					autoplay: false,
-					interval: 3000,
+					autoplay: true,
+					interval: 4000,
 					duration: 300,
 					circular: true,
 					previousMargin: '58rpx',
@@ -94,6 +91,12 @@
 			this.getDatas()
 			this.getRecommendData()
 		},
+		onPullDownRefresh() {
+			this.refresh()
+		},
+		onReachBottom(){  //上拉触底函数
+			this.infiniteScroll()
+		},
 		methods: {
 			closeAlertImg(){
 				this.isAlertImgShow = false
@@ -112,6 +115,7 @@
 			getDatas(type){
 				this.$request('/api/view/homeAdList','post',this.param).then(res => {
 					uni.hideLoading()
+					uni.stopPullDownRefresh();
 					if(res.code == 200){
 						if(type == 'loadmore'){
 							this.questions.push(...res.data.homeAdList)
@@ -133,11 +137,11 @@
 			getAlertData(){ 
 				let param = {
 					"cityCode": this.param.cityCode,
-					"homeType": 2
+					"homeType": 3
 				}
 				this.$request('/api/view/getAlertOrCover','post',param).then(res => {
 					if(res.code == 200){
-						if(res.data != null){
+						if(Object.keys(res.data)>0){
 							let storageDate = uni.getStorageSync('date')
 							let nowDate = new Date().getTime()
 							let spaceTime = Math.floor((nowDate-storageDate)/1000/60/60)
@@ -233,9 +237,9 @@
 					})
 					return
 				}
+				if(this.pullupLoadingType == 'noMore'){return}
 				
 				this.param.pagesNum ++
-				// console.log(this.param.pagesNum)
 				this.pullupLoadingType = 'loading'
 				uni.showLoading({
 					title:'加载中'

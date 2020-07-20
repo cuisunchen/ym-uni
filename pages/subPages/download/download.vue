@@ -9,7 +9,7 @@
 				</view>
 			</view>
 			
-			<image class="shareImg" src="../../../static/other/shareImg.png" mode="widthFix"></image>
+			<image class="shareImg" src="../../../static/other/shareImg.png" mode="aspectFill"></image>
 			<view class="bot flex">
 				<view class="leftCon flex1">
 					<view class="title">今日友米</view>

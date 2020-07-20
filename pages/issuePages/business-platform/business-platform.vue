@@ -1,44 +1,47 @@
 <template>
-	<view class="issueHomePage">
-		<view class="bgImgBox">
-			<image class="img" src="../../../static/mineBg.jpeg" mode="aspectFill"></image>
-			<view class="layout"></view>
-		</view>
-		
-		<view class="wrap">
-			<view class="userInfo flex align-center">
-				<view class="avatar">
-					<image :src="info.avatarUrl" mode=""></image>
+	<view class="issueHomePage flex-column">
+		<view class="contentWrap flex1">
+			<view class="bgImgBox">
+				<image class="img" src="../../../static/mineBg.jpeg" mode="aspectFill"></image>
+				<view class="layout"></view>
+				<view class="con">
+					<view class="userInfo flex align-center">
+						<view class="avatar">
+							<image :src="info.avatarUrl" mode=""></image>
+						</view>
+						<view class="name">{{info.nickName}}</view>
+					</view>
+					
+					<view class="peoples flex-column align-center">
+						<view class="label">当前用户人数</view>
+						<view class="num">{{info.peopleCount}}</view>
+					</view>
+					
+					<view class="noticeBox flex">
+						<view class="img">
+							<image src="../../../static/xiaox.png" mode=""></image>
+						</view>
+						<view class="notice flex1">
+							<uni-notice-bar v-if="info.broadcast" scrollable="true" color="#666" background-color="#eee" 
+													:speed="info.broadcast.length>50?70:100" :text="info.broadcast"></uni-notice-bar>
+						</view>
+					</view>
 				</view>
-				<view class="name">{{info.nickName}}</view>
 			</view>
 			
-			<view class="peoples flex-column align-center">
-				<view class="label">当前用户人数</view>
-				<view class="num">{{info.peopleCount}}</view>
+			<view class="wrap">
+				<ym-grid class="orderManage" title="订单管理" :column="3">
+					<ym-grid-item  v-for="(item,index) in renderManage" :key="index" :data-obj="item" @click="itemClick(item)"></ym-grid-item>
+				</ym-grid>
+				
+				<ym-grid class="orderManage" title="消息/问题/须知" :column="3">
+					<ym-grid-item  v-for="(item,index) in renderOthers" :key="index" :data-obj="item" @click="itemClick(item)"></ym-grid-item>
+				</ym-grid>
 			</view>
-			
-			<view class="noticeBox flex">
-				<view class="img">
-					<image src="../../../static/xiaox.png" mode=""></image>
-				</view>
-				<view class="notice flex1">
-					<uni-notice-bar v-if="info.broadcast" scrollable="true" color="#666" background-color="#eee" 
-											:speed="info.broadcast.length>50?70:100" :text="info.broadcast"></uni-notice-bar>
-				</view>
-			</view>
-			
-			<ym-grid class="orderManage" title="订单管理" :column="3">
-				<ym-grid-item  v-for="(item,index) in renderManage" :key="index" :data-obj="item" @click="itemClick(item)"></ym-grid-item>
-			</ym-grid>
-			
-			<ym-grid class="orderManage" title="消息/问题/须知" :column="3">
-				<ym-grid-item  v-for="(item,index) in renderOthers" :key="index" :data-obj="item" @click="itemClick(item)"></ym-grid-item>
-			</ym-grid>
 		</view>
 		
 		<view class="issueBtnBox flex all-center">
-			<view class="issueBtn flex all-center" @click="goIssuePage">发布广告</view>
+			<view class="issueBtn flex1 flex all-center" @click="goIssuePage">发布广告</view>
 		</view>
 	</view>
 </template>
@@ -70,7 +73,7 @@
 				renderOthers:[]
 			}
 		},
-		onLoad() {
+		onShow() {
 			uni.showLoading({
 				title:'加载中'
 			})
@@ -135,31 +138,87 @@
 <style lang="scss" scoped>
 .issueHomePage{
 	height: 100%;
-	padding-bottom: 130rpx;
 	position: relative;
+	.contentWrap{
+		overflow-y: scroll;
+	}
 	.bgImgBox{
 		width: 100%;
-		height: 330rpx;
+		height: 370rpx;
 		position: relative;
 		.img{
 			width: 100%;
-			height: 100%;
+			height: 330rpx;
 		}
 		.layout{
 			position: absolute;
 			top: 0;
-			bottom: 0;
+			bottom: 40rpx;
 			left: 0;
 			right: 0;
 			background-color: rgba(0, 0, 0, .2);
 		}
+		.con{
+			position: absolute;
+			top: 0;
+			left: 20rpx;
+			right: 20rpx;
+			.userInfo{
+				margin-top: 36rpx;
+				.avatar{
+					width: 100rpx;
+					height: 100rpx;
+					border-radius: 8rpx;
+					background-color: #2C405A;
+					margin-left: 16rpx;
+					image{
+						width: 100%;
+						height: 100%;
+					}
+				}
+				.name{
+					color: #fff;
+					font-size: 32rpx;
+					margin-left: 20rpx;
+				}
+			}
+			.peoples{
+				color: #fff;
+				margin-top: 20rpx;
+				.label{
+					font-size: 24rpx;
+				}
+				.num{
+					font-size: 46rpx;
+					font-weight: bold;
+				}
+			}
+			.noticeBox{
+				background-color: #eee;
+				padding: 6rpx 0;
+				font-size: 28rpx;
+				margin-top: 40rpx;
+				border-radius: 10rpx;
+				.img{
+					width: 70rpx;
+					height: 70rpx;
+					margin-left: 4rpx;
+					image{
+						width: 100%;
+						height: 100%;
+					}
+				}
+				/deep/ .uni-noticebar{
+					font-size: 24rpx;
+					height: 100%;
+					padding: 0 8rpx;
+					margin-bottom: 0;
+				}
+			}
+		}
 	}
 	
 	.wrap{
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
 		padding: 0 20rpx 40rpx;
 		.userInfo{
 			margin-top: 36rpx;
@@ -216,24 +275,14 @@
 		.orderManage{
 			margin-top: 30rpx;
 		}
-		.others{
-			
-		}
 	}
 
 	.issueBtnBox{
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
 		height: 100rpx;
+		padding: 0 26rpx;
 		background-color: #fff;
-		border-top: 1rpx solid #d7d9de;
+		border-top: 1rpx solid #eee;
 		.issueBtn{
-			position: absolute;
-			top: 10rpx;
-			left: 26rpx;
-			right: 26rpx;
 			height: 80rpx;
 			color: #fff;
 			background-color: #B4C386;

@@ -2,9 +2,10 @@
 	<view class="collectionADPage flex-column">
 		<ym-tabs class="head" :tab-index="swiperIndex" :data-obj="tabs" @change="tabChage"></ym-tabs>
 		
-		<ygc-refresh class="lists flex1"
+		<!-- <ygc-refresh class="lists flex1"
 		    @onRefresh="refresh" 
-		    @scrolltolower="infiniteScroll">
+		    @scrolltolower="infiniteScroll"> -->
+				<view class="lists flex1">
 				<swiper class="swiper" :current="swiperIndex" :autoplay="false" :duration="500" @change="swiperChage">
 					<swiper-item>
 						<view class="swiper-item swiper-item1">
@@ -37,7 +38,8 @@
 						</view>
 					</swiper-item>
 				</swiper>
-		</ygc-refresh>
+				</view>
+		<!-- </ygc-refresh> -->
 	</view>
 </template>
 <script>
@@ -65,6 +67,12 @@
 		created() {
 			this.getDatas()
 		},
+		onPullDownRefresh() {
+			this.refresh()
+		},
+		onReachBottom(){  //上拉触底函数
+			this.infiniteScroll()
+		},
 		methods: {
 			getDatas(){
 				uni.showLoading({
@@ -72,7 +80,8 @@
 				})
 				this.$request('/api/view/getMyCollect','post',this.param).then(res => {
 					uni.hideLoading()
-					console.log(res)
+					uni.stopPullDownRefresh();
+					// console.log(res)
 					if(res.code == 200){
 						if(this.swiperIndex == 0){
 							this.questions = res.data.homeAdList

@@ -1,12 +1,13 @@
 <template>
 	<view class="loginPage flex justifu-center">
 		<view class="loginBox">
-			<view class="tab flex">
-				<view class="wechatLogin flex1 flex all-center" :class="{active: currentTab == 0}" @click="tabChange(0)">登录码登录</view>
-				<view class="codeLogin flex1 flex all-center" :class="{active: currentTab == 1}" @click="tabChange(1)">手机验证码登录</view>
-			</view>
-			
-			<swiper class="swiper" :current="currentTab" @change="swiperChange">
+			<view class="loginWrap">
+				<view class="tab flex">
+					<view class="wechatLogin flex1 flex all-center" :class="{active: currentTab == 0}" @click="tabChange(0)">登录码登录</view>
+					<view class="codeLogin flex1 flex all-center" :class="{active: currentTab == 1}" @click="tabChange(1)">手机验证码登录</view>
+				</view>
+				
+				<swiper class="swiper" :current="currentTab" @change="swiperChange">
 					<swiper-item>
 							<view class="swiper-item">
 								<input class="uni-input" maxlength="11" type="number" v-model="form.phone" placeholder-class="inputHolder" placeholder="请输入手机号" />
@@ -24,7 +25,13 @@
 								<button class="loginBtn flex all-center" :class="{disabled:loading2}" type="default" :loading="loading2" :disabled="loading2" @click="login">登录</button>
 							</view>
 					</swiper-item>
-			</swiper>
+				</swiper>
+			</view>
+			
+			<view class="wrap">
+				<view>小程序极易分享推广,获取更多好友,提高收益</view>
+				<view>推荐使用登录码登录</view>
+			</view>
 		</view>
 		<view class="tip" v-if="currentTab == 0">
 			<view class="label">登录码登录步骤:</view>
@@ -174,76 +181,88 @@
 </style>
 <style lang="scss" scoped>
 .loginPage{
-	
 	height: 100%;
 	position: relative;
 	.loginBox{
 		width: 88%;
-		height: 460rpx;
+		
 		margin-top: 300rpx;
-		border-radius: 20rpx;
-		background-color: #fff;
-		overflow: hidden;
-		box-shadow: 
-							-6rpx -6rpx 28rpx 6rpx rgba(110, 109, 109,0.2), 
-							6rpx -6rpx 28rpx 6rpx rgba(110, 109, 109,0.2), 
-							-6rpx 6rpx 28rpx 6rpx rgba(110, 109, 109,0.2),
-							6rpx 6rpx 28rpx 6rpx rgba(110, 109, 109,0.2);
-		.tab{
-			color: #666;
-			height: 80rpx;
-			font-size: 28rpx;
-			font-weight: bold;
-			background-color: #eee;
-			.active{
-				color: #52a4bd;
-				background-color: #fff;
+		.loginWrap{
+			height: 460rpx;
+			background-color: #fff;
+			overflow: hidden;
+			border-radius: 20rpx;
+			box-shadow:
+								-6rpx -6rpx 28rpx 6rpx rgba(110, 109, 109,0.2), 
+								6rpx -6rpx 28rpx 6rpx rgba(110, 109, 109,0.2), 
+								-6rpx 6rpx 28rpx 6rpx rgba(110, 109, 109,0.2),
+								6rpx 6rpx 28rpx 6rpx rgba(110, 109, 109,0.2);
+			.tab{
+				color: #666;
+				height: 80rpx;
+				font-size: 28rpx;
+				font-weight: bold;
+				background-color: #eee;
+				.active{
+					color: #52a4bd;
+					background-color: #fff;
+				}
 			}
-		}
-		.swiper{
-			height: 100%;
-			.swiper-item{
-				padding: 30rpx;
-				.uni-input{
-					color: #333;
-					height: 80rpx;
-					line-height: 40rpx;
-					border-radius: 10rpx;
-					margin-bottom: 30rpx;
-					padding: 0 16rpx;
-					border: 1rpx solid #999;
-					&:last-child{
-						margin-bottom: 0;
-					}
-				}
-				.inputHolder{
-					font-size: 24rpx;
-				}
-				.loginBtn{
-					color: #fff;
-					height: 80rpx;
-					margin-top: 30rpx;
-					background-color: #52a4bd;
-				}
-				.disabled{
-					background-color: rgba(82, 164, 189, .7)!important;
-				}
-				.box{
+			.swiper{
+				height: 100%;
+				.swiper-item{
+					padding: 30rpx;
 					.uni-input{
-						margin-bottom: 0;
+						color: #333;
+						height: 80rpx;
+						line-height: 40rpx;
+						border-radius: 10rpx;
+						margin-bottom: 30rpx;
+						padding: 0 16rpx;
+						border: 1rpx solid #999;
+						&:last-child{
+							margin-bottom: 0;
+						}
 					}
-					button{
+					.inputHolder{
+						font-size: 24rpx;
+					}
+					.loginBtn{
 						color: #fff;
-						width: 246rpx;
-						font-size: 26rpx;
-						line-height: 80rpx;
-						margin-left: 30rpx;
+						height: 80rpx;
+						margin-top: 30rpx;
 						background-color: #52a4bd;
-						&::after{
-							border: none;
+					}
+					.disabled{
+						background-color: rgba(82, 164, 189, .7)!important;
+					}
+					.box{
+						.uni-input{
+							margin-bottom: 0;
+						}
+						button{
+							color: #fff;
+							width: 246rpx;
+							font-size: 26rpx;
+							line-height: 80rpx;
+							margin-left: 30rpx;
+							background-color: #52a4bd;
+							&::after{
+								border: none;
+							}
 						}
 					}
 				}
+			}
+		}
+		.wrap{
+			color: #fff;
+			margin-top: 50rpx;
+			padding: 16rpx 0;
+			border-radius: 10rpx;
+			background-color: #333;
+			>view{
+				text-align: center;
 			}
 		}
 	}

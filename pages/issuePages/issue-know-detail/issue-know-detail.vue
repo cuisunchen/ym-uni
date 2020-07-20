@@ -1,6 +1,6 @@
 <template>
 	<view class="issueKnowDetail">
-		<image ref="img" class="img" :src="dataObj.contentImg" mode="widthFix" @load="imgLoad" :style="{height:imgHeight+'px'}"></image>
+		<image ref="img" class="img" :src="dataObj.contentImg" mode="aspectFill" @load="imgLoad" :style="{height:imgHeight+'px'}"></image>
 	</view>
 </template>
 

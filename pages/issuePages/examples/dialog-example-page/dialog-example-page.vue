@@ -34,7 +34,7 @@
 		data() {
 			return {
 				obj:{
-					imgUrl: "../../../../static/other/ste@2x.png",
+					homeTopImgUrl: "../../../../static/other/ste@2x.png",
 					bigImg: "../../../static/other/content@2x.png"
 				}
 			}

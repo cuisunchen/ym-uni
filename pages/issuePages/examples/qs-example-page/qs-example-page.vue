@@ -23,6 +23,7 @@
 
 <script>
 	import homeListItem from "@/components/home-list-item/home-list-item.vue"
+	import { keepTwoDecimalFull } from '@/common/utils/tools.js'
 	export default {
 		components: {homeListItem},
 		data() {
@@ -36,7 +37,7 @@
 					rangeType:'全国',
 					status:'未完成',
 					userGet:'未得',
-					price:'0.30',
+					price:keepTwoDecimalFull(0.30*2/3),
 					clickNum: 0,
 				}
 			}
@@ -45,6 +46,7 @@
 			if(opt.type == 'preview'){
 				this.pageTit = '效果如下'
 				this.dataObj = JSON.parse(decodeURIComponent(opt.pageData))
+				this.dataObj.price = String(Number(this.dataObj.price)*2/3).substring(0,4)
 			}
 		},
 		methods: {

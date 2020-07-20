@@ -70,6 +70,7 @@
 					uni.hideLoading()
 					if(res.code == 200){
 						this.renderList = res.data
+						console.log(res.data)
 					}
 				})
 			}

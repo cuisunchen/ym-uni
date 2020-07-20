@@ -42,7 +42,7 @@
 		padding: 40rpx 20rpx;
 		border-radius: 10rpx;
 		margin-bottom: 60rpx;
-		background-color: #FFA200;
+		background-color: rgb(206,177,120);
 		&:last-child{
 			margin-bottom: 0;
 		}

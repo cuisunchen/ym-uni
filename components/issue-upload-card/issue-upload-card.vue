@@ -2,7 +2,7 @@
 	<view class="issueUploadCard flex">
 		<view class="chooseImgBox flex all-center" :class="{'row2':type == 'row2','row3':type == 'row3','column': type == 'column'}" @click="chooseImg">
 			<uni-icons type="plusempty" size="30" color="#999" v-if="!imgUrl"></uni-icons>
-			<image :src="imgUrl" mode="" v-else></image>
+			<image :src="imgUrl" mode="aspectFill" v-else></image>
 		</view>
 		<view class="con flex-column justifu-center">
 			<view class="title">上传{{title}}图片</view>

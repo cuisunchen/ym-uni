@@ -1,7 +1,7 @@
 <template>
 	<view class="listItem flex" @click="goPage">
 		<view class="left flex all-center">
-			<image :src="item.homeTopImgUrl" lazy-load :class="{'defaultImgClass': !item.homeTopImgUrl}"  mode=""></image>
+			<image :src="item.homeTopImgUrl" lazy-load :class="{'defaultImgClass': !item.homeTopImgUrl}" mode="aspectFill"></image>
 		</view>
 		<view class="right flex1">
 			<view class="tit">{{item.title}}</view>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+	
 	export default {
 		props: {
 			dataObj:{

@@ -39,7 +39,7 @@
 						clickNum: 0,
 						collect: false,
 						homeBigImgUrl: "",
-						homeTopImgUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590397724969&di=0512eba40e6fe351bde6e3a9f550d610&imgtype=0&src=http%3A%2F%2Fimg.99114.com%2Fgroup1%2FM00%2F4F%2FCE%2FwKgGMFhQ75mAFYFgAACwn34WPcc530.png",
+						homeTopImgUrl: '../../../static/wait.jpeg',
 						id: "",
 						title: "虚位以待,就等你来",
 					},
@@ -47,7 +47,7 @@
 						clickNum: 0,
 						collect: false,
 						homeBigImgUrl: "",
-						homeTopImgUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590397724969&di=0512eba40e6fe351bde6e3a9f550d610&imgtype=0&src=http%3A%2F%2Fimg.99114.com%2Fgroup1%2FM00%2F4F%2FCE%2FwKgGMFhQ75mAFYFgAACwn34WPcc530.png",
+						homeTopImgUrl: "../../../static/wait.jpeg",
 						id: "",
 						title: "虚位以待,就等你来",
 					},
@@ -55,7 +55,7 @@
 						clickNum: 0,
 						collect: false,
 						homeBigImgUrl: "",
-						homeTopImgUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590397724969&di=0512eba40e6fe351bde6e3a9f550d610&imgtype=0&src=http%3A%2F%2Fimg.99114.com%2Fgroup1%2FM00%2F4F%2FCE%2FwKgGMFhQ75mAFYFgAACwn34WPcc530.png",
+						homeTopImgUrl: "../../../static/wait.jpeg",
 						id: "",
 						title: "虚位以待,就等你来",
 					}
@@ -101,7 +101,6 @@
 			}else{
 				this.renderList.splice(0,this.item.length,...this.item)
 			}
-			
 			uni.getSystemInfo({
 				success:(res)=>{
 					this.recomendItemHeight = (res.windowWidth-16-12)/3

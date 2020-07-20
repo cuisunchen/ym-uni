@@ -69,6 +69,7 @@
 				this.recommendList[0].homeTopImgUrl = this.dataObj.homeTopImgUrl
 				this.recommendList[0].homeBigImgUrl = this.dataObj.homeBigImgUrl
 				this.recommendList[0].bigImg = this.dataObj.bigImg
+				this.recommendList[0].title = this.dataObj.title
 			}
 		},
 		methods: {

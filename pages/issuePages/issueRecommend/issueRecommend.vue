@@ -7,7 +7,7 @@
 			</view>
 			<view class="priceBox box"> 
 				<text class="label">费用说明:</text>
-				<text class="price"> {{unitPrice}} 元/条</text>
+				<text class="price"> {{unitPrice}} 元/天</text>
 			</view>
 		</view>
 		
@@ -48,6 +48,15 @@
 		            :pickerValueDefault="pickerValueDefault" 
 		            :allData="levelData"
 		            @onConfirm="onConfirm" themeColor='#007AFF'></level-linkage>
+		
+		<aui-toast
+		    ref="toast"
+		    :msg="auiToast.msg"
+		    :location = "auiToast.location"
+		    :direction="auiToast.direction"
+		    :icon="auiToast.icon"
+		    :duration="auiToast.duration"
+		></aui-toast>
 	</view>
 </template>
 
@@ -58,6 +67,7 @@
 	import levelLinkage from "@/components/three-level-linkage/linkage.nvue"
 	import citysData from '../../../common/utils/citys.js'
 	import { mapGetters, mapMutations } from 'vuex'
+	import auiToast from '@/components/aui-toast/aui-toast.vue';
 	export default {
 		components:{issueUploadCard,issueConImgUploadCard,issueFormCell,levelLinkage},
 		data() {
@@ -81,6 +91,13 @@
 				unitPrice: '',
 				topImgClear: false,
 				conImgClear: false,
+				auiToast: {
+					msg: '请选择发布位置',
+					icon: '../../../static/warning.png',
+					location: 'middle',
+					direction: 'col',
+					duration: 2000,
+				},
 			}
 		},
 		computed: {
@@ -174,6 +191,22 @@
 			submitRequest(){
 				this.$request('/api/recommend','post',this.form).then(res => {
 					if(res.code == 200){
+						if(uni.getSystemInfoSync().platform == 'android'){
+							uni.showModal({
+								title:"是否确定支付",
+								content:`需支付金额: ${res.data.amount}元`,
+								confirmText:'残忍拒绝',
+								cancelText:'朕去支付',
+								success:(re) => {
+									if(re.cancel){
+										this.userPayAd(res.data.homeAdId)
+									} else if (res.confirm) {
+										console.log('用户点击取消');
+									}
+								}
+							})
+							return
+						}
 						uni.showModal({
 							title:"是否确定支付",
 							content:`需支付金额: ${res.data.amount}元`,
@@ -200,12 +233,10 @@
 						    orderInfo: res.data, //微信、支付宝订单数据
 								success: (res) => {
 									let rawdata = JSON.parse(res.rawdata)
-									let result = JSON.parse(rawdata.result)
 									this.topImgClear = true
 									this.conImgClear = true
 									this.set_chooseDays([])
-									this.initForm()
-									if(rawdata.resultStatus == '9000' && result.code == 10000 && result.msg == "Success"){
+									if(rawdata.resultStatus == '9000'){
 										uni.showModal({
 											title:'恭喜您,订单支付成功!',
 											content:'如有疑问,请联系客服',
@@ -216,8 +247,16 @@
 												})
 											}
 										})
+									}else
+									if(rawdata.resultStatus == '8000'){
+										this.showToast('订单处理中,请稍等片刻!')
+									}else
+									if(rawdata.resultStatus == '4000'){
+										this.showToast('订单支付失败')
+									}else
+									if(rawdata.resultStatus == '6002'){
+										this.showToast('网络连接出错')
 									}
-									// this.initForm()
 								},
 								fail: (err)=> {
 									uni.showModal({
@@ -259,11 +298,24 @@
 				}
 			},
 			goTimePage(){
+				if((this.form.homeType == 6 || this.form.homeType == 7) && !this.form.cityCode){
+					this.$refs.toast.show()
+					return
+				}
 				let url = ''
+				// let addr = this.form.address.split(' ')
+				let rangeName = this.form.address ? this.form.address.split(' ')[this.form.address.split(' ').length-1] : '全国'
+				let param = {
+					totalPeople: this.totalPeople,
+					unitPrice: this.unitPrice,
+					homeType:this.form.homeType,
+					cityCode:this.form.cityCode,
+					rangeName: rangeName
+				}
 				if(this.chooseDays.length > 0){
-					url = '../issue-time-list/issue-time-list?isEdit=true'
+					url = '../issue-time-list/issue-time-list?isEdit=true&param='+encodeURIComponent(JSON.stringify(param))
 				}else{
-					url = '../issue-time-list/issue-time-list?isEdit=false'
+					url = '../issue-time-list/issue-time-list?isEdit=false&param='+encodeURIComponent(JSON.stringify(param))
 				}
 				uni.navigateTo({
 					url
@@ -279,8 +331,8 @@
 				let obj = {
 					title: this.form.title,
 					homeTopImgUrl: this.form.homeTopImgUrl,
-					homeBigImgUrl: this.form.homeBigImgUrl || this.netUrl,
-					bigImg: this.form.homeBigImgUrl,
+					homeBigImgUrl: this.netUrl|| this.form.homeBigImgUrl,
+					bigImg: this.netUrl|| this.form.homeBigImgUrl,
 				}
 				let res = this.checkRecommend(obj)
 				if(!res){

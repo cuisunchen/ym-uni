@@ -3,7 +3,7 @@
 		<view class="label">{{label}}</view>
 		<view class="desc flex1 ellipsis_one" :style="{color:descColor}" v-if="desc">{{desc}}</view>
 		<input class="flex1" v-if="!desc && !isTime && !pageUrl" type="number" :value="value" 
-						placeholder-class="holderClass" :placeholder="placeholderTxt"  @input="inputFun($event)"/>
+						placeholder-class="inputHold" :placeholder="placeholderTxt"  @input="inputFun($event)"/>
 		<ruiDatePicker v-if="isTime" class="flex1 picker"
 			fields="minute"
 			start="2010-00-00 00:00"
@@ -54,6 +54,12 @@
 					return ''
 				}
 			},
+			issueType:{
+				type: String,
+				default(){
+					return ''
+				}
+			},
 			descColor:{
 				type: String,
 				default(){
@@ -82,7 +88,7 @@
 		},
 		computed:{
 			placeholderTxt(){
-				return '全国发布,最少发布'+ this.issueNum +'条'
+				return  this.issueType + '发布,最少发布'+ this.issueNum +'条'
 			}
 		},
 		
@@ -122,6 +128,9 @@
 	}
 	.iconBox{
 		width: 60rpx;
+	}
+	.inputHold{
+		color: #999;
 	}
 }
 </style>

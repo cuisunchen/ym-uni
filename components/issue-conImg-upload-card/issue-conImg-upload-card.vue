@@ -3,7 +3,7 @@
 		<view class="wrap flex">
 			<view class="chooseImgBox flex all-center" @click="chooseImg">
 				<uni-icons type="plusempty" size="30" color="#999" v-if="!imgUrl"></uni-icons>
-				<image :src="imgUrl" mode="" v-else></image>
+				<image :src="imgUrl" mode="aspectFill" v-else></image>
 			</view>
 			<view class="con flex1 flex align-center">
 				<view class="text">或</view>
@@ -105,13 +105,13 @@
 			height: 80rpx;
 			border-radius: 10rpx;
 			padding: 0 10rpx;
-			border: 1rpx solid #e1dee4;
+			border: 1rpx solid #eee;
 		}
 	}
 	.conText{
 		margin-top: 30rpx;
 		padding-top: 30rpx;
-		border-top: 1rpx solid #e1dee4;
+		border-top: 1rpx solid #eee;
 		.title{
 			color: #000;
 			font-size: 28rpx;
