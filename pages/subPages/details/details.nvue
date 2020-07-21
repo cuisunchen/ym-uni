@@ -10,7 +10,7 @@
 				<text class="text">剩余: {{timeNum}} s</text>
 		</view>
 		
-		<uni-fab :pattern="pattern" :title="fabText"
+		<uni-fab :pattern="pattern" :title="fabText" v-if="fabShow"
 		        :content="content"
 		        :horizontal="horizontal"
 		        :vertical="vertical"
@@ -69,7 +69,8 @@
 				isCollect:false,     //  广告是否收藏
 				fabText:'',
 				prevPage: null,  	//上一个页面的实例
-				dataIndex:null
+				dataIndex:null,
+				fabShow: false
 			}
 		},
 		onLoad(option) {
@@ -92,7 +93,7 @@
 			}
 			this.screenHeight = uni.getSystemInfoSync().windowHeight
 			this.statusBarHeight = uni.getSystemInfoSync().statusBarHeight
-			
+			this.fabShow = true
 			let pages = getCurrentPages();  
 			this.prevPage = pages[pages.length - 2]; 
 		},

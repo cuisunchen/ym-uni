@@ -23,6 +23,13 @@
 			}
 		},
 		onShow() {
+			let token = uni.getStorageSync('token')
+			if(!token){
+				uni.reLaunch({
+					url:'pages/subPages/login/login'
+				})
+				return
+			}
 			uni.showLoading({
 				title:'加载中...'
 			})
