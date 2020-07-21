@@ -85,7 +85,7 @@
 					uni.hideLoading()
 					if(res.code == 200){
 						this.info = res.data
-						this.info.nickName = res.data.nickName.substring(0,4) + '****' + res.data.nickName.substr(-4)
+						this.info.nickName = res.data.nickName.substring(0,3) + '****' + res.data.nickName.substr(-4)
 						this.manageData.map(item => {
 							if(item.pageTitle == "待审核"){
 								item.nums = res.data.unreviewedNum

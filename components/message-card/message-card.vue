@@ -36,6 +36,7 @@
 			// #ifdef H5
 			this.item=this.dataObj
 			// #endif
+			this.item.tag = this.item.tag.substring(0,2)
 		},
 		methods: {
 			

@@ -4,7 +4,7 @@
 			<text class="text">{{timeNum}} 跳过</text>
 		</view>
 		<view class="imgBox">
-			<image class="img" :src="dataObj.titleImg" mode="aspectFill" @click="goDetail"></image>
+			<image class="img" :src="dataObj.titleImg" @load="imgLoad" mode="aspectFill" @click="goDetail"></image>
 		</view>
 		<view class="logoBox flex all-center">
 			<image class="img" src="../../../static/tip02@2x.png" mode="aspectFill"></image>
@@ -16,7 +16,9 @@
 	export default {
 		data() {
 			return {
-				dataObj:{},
+				dataObj:{
+					titleImg:'../../../static/place/fengPlace@2x.png'
+				},
 				timer: null,
 				timeNum: 5,
 				showTimer: false
@@ -51,6 +53,21 @@
 			
 		},
 		methods: {
+			imgLoad(){
+				uni.hideLoading()
+				clearInterval(this.timer)
+				this.timer = setInterval(() => {
+					this.timeNum --
+					if(this.timeNum == -1){
+						 this.showTimer = false
+						 this.timer = null
+						 uni.reLaunch({
+								url:'../../tabBar/home/home'
+						 })
+						 clearInterval(this.timer)
+					}
+				}, 1000);
+			},
 			goHome(){
 				uni.reLaunch({
 					url:'../../tabBar/home/home'
@@ -85,18 +102,9 @@
 					if(res.code == 200 && res.data.titleImg){
 						this.showTimer = true
 						this.dataObj = res.data
-						this.timer = setInterval(() => {
-							
-							this.timeNum --
-							if(this.timeNum == -1){
-								 this.showTimer = false
-								 this.timer = null
-								 uni.reLaunch({
-										url:'../../tabBar/home/home'
-								 })
-								 clearInterval(this.timer)
-							}
-						}, 1000);
+						uni.showLoading({
+							title:'加载中'
+						})
 					}else{
 						uni.navigateTo({
 							url:'../../tabBar/home/home'

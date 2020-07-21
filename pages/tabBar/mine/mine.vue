@@ -94,7 +94,7 @@
 					if(res.code == 200){
 						uni.hideLoading()
 						this.userInfo = res.data
-						this.userInfo.nickName = res.data.nickName.substring(0,4) + '****' + res.data.nickName.substr(-4)
+						this.userInfo.nickName = res.data.nickName.substring(0,3) + '****' + res.data.nickName.substr(-4)
 						uni.stopPullDownRefresh();
 						uni.setStorage({
 						    key: 'userInfo',

@@ -2,7 +2,7 @@
 	<view class="dialogExamplePage">
 		<view class="dialog flex-column all-center">
 			<view class="imgWrap" @click="goDetail">
-				<image :src="obj.homeTopImgUrl || obj.imgUrl" mode=""></image>
+				<image :src="obj.homeTopImgUrl || obj.imgUrl" mode="aspectFill"></image>
 			</view>
 			<view class="close">
 				<uni-icons class="close flex all-center" type="closeempty" color="#999" size="22"></uni-icons>

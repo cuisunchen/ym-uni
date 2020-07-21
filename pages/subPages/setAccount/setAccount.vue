@@ -3,13 +3,13 @@
 		<view class="formBox">
 			<view class="account">
 				<view class="label">{{type=='wechat'?'微信':'支付宝'}}账号</view>
-				<input type="text" :disabled="isNoInput" v-model="form.account" placeholder="请输入提现账号" />
+				<input type="text" placeholder-class="holderClass" :disabled="isNoInput" v-model="form.account" placeholder="请输入提现账号" />
 				<view class="desc">请谨慎填写,提交后不能再更改</view>
 			</view>
 			
 			<view class="name">
 				<view class="label">{{type=='wechat'?'微信':'支付宝'}}姓名</view>
-				<input type="text" :disabled="isNoInput" v-model="form.name" placeholder="请输入真实姓名" />
+				<input type="text" placeholder-class="holderClass" :disabled="isNoInput" v-model="form.name" placeholder="请输入真实姓名" />
 			</view>
 		</view>
 		
@@ -46,26 +46,36 @@
 		},
 		onLoad(opt) {
 			this.type = opt.type
-			this.aliPayInfo = JSON.parse(decodeURIComponent(opt.aliPayInfo))
-			this.weChatInfo = JSON.parse(decodeURIComponent(opt.weChatInfo))
-			if(this.aliPayInfo.realName || this.weChatInfo.realName){
-				this.isNoInput = true
-			}else{
-				this.isNoInput = false
-			}
+			
+			
 			if(opt.type == 'wechat'){
+				this.weChatInfo = JSON.parse(decodeURIComponent(opt.weChatInfo))
 				this.form.account = this.weChatInfo.account
 				this.form.name = this.weChatInfo.realName
 				uni.setNavigationBarTitle({
 				　　title:'设置微信账号'
 				})
+				if(this.weChatInfo.realName){
+					this.isNoInput = true
+				}else{
+					this.isNoInput = false
+				}
 			}else{
+				this.aliPayInfo = JSON.parse(decodeURIComponent(opt.aliPayInfo))
 				this.form.account = this.aliPayInfo.account
 				this.form.name = this.aliPayInfo.realName
 				uni.setNavigationBarTitle({
 				　　title:'设置支付宝账号'
 				})
+				if(this.aliPayInfo.realName){
+					this.isNoInput = true
+				}else{
+					this.isNoInput = false
+				}
 			}
+			
+			console.log(opt.type)
+			
 		},
 		methods: {
 			submit(){
@@ -77,10 +87,9 @@
 				this.$request('/api/bindCashOut','post',param).then(res => {
 					if(res.code ==200){
 						this.showToast('设置成功')
-						this.form = {
-							account:'',
-							name:''
-						}
+						uni.navigateBack({
+							delta:1
+						})
 					}else{
 						this.showToast(res.msg)
 					}

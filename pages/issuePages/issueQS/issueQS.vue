@@ -370,7 +370,7 @@
 					uni.hideLoading()
 					if(res.code == 200){
 						this.totalPeople = res.data.peopleTotal
-						this.unitPrice = res.data.initialPrice
+						this.unitPrice = res.data.adUnitPrice
 						this.minNumber = res.data.minNumber
 					}
 				})

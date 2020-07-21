@@ -41,14 +41,14 @@
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">最大奖励:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.maxPrize" placeholder="最低0.10元" placeholder-class="inputHold"/>
+							<input type="number" v-model="form.maxPrize" :placeholder="prizeObj.maxReward" placeholder-class="inputHold"/>
 						</view>
 					</view>
 					
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">数量:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.maxNum" placeholder="数量(最低1)" placeholder-class="inputHold"/>
+							<input type="number" v-model="form.maxNum" :placeholder="prizeObj.maxNum" placeholder-class="inputHold"/>
 						</view>
 					</view>
 				</view>
@@ -56,14 +56,14 @@
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">最低奖励:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.minPrize" placeholder="最低0.10元" placeholder-class="inputHold"/>
+							<input type="number" v-model="form.minPrize" :placeholder="prizeObj.minReward" placeholder-class="inputHold"/>
 						</view>
 					</view>
 					
 					<view class="reward flex1 flex align-center">
 						<text class="label flex-shrink">数量:</text>
 						<view class="inputBox">
-							<input type="number" v-model="form.minNum" placeholder="数量(最低1)" placeholder-class="inputHold"/>
+							<input type="number" v-model="form.minNum" :placeholder="prizeObj.minNum" placeholder-class="inputHold"/>
 						</view>
 					</view>
 				</view>
@@ -148,6 +148,12 @@
 				levelData:[],
 				totalPeople: null,
 				minNumber: 3,
+				prizeObj:{
+					maxReward: '',
+					maxNum: null,
+					minReward:'',
+					minNum:''
+				}
 			}
 		},
 		computed: {
@@ -204,6 +210,10 @@
 				this.$request('/api/releasePrice','post',param).then(res=>{
 					uni.hideLoading()
 					if(res.code == 200){
+						this.prizeObj.maxReward = `最低${res.data.qmaxPrice}元`
+						this.prizeObj.maxNum = `数量(最低${res.data.qmaxNum})`
+						this.prizeObj.minReward = `最低${res.data.qminPrice}元`
+						this.prizeObj.minNum = `数量(最低${res.data.qminNum})`
 						this.totalPeople = res.data.peopleTotal
 						this.minNumber = res.data.minNumber
 					}

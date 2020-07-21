@@ -3,7 +3,7 @@
 		<view class="title" v-if="isTitleShow">今日推荐</view>
 		<view class="listWrap flex">
 			<view v-for="(item,index) in renderList" :key="index" class="list-item flex1" @click="itemClick(item)">
-				<image :src="item.homeTopImgUrl" mode="" :style="{height:recomendItemHeight+'px'}"></image>
+				<image :src="item.homeTopImgUrl" mode="aspectFill" :style="{height:recomendItemHeight+'px'}"></image>
 				<view class="tit" :style="{'text-align':!item.homeBigImgUrl?'center':''}">{{item.title}}</view>
 			</view>
 		</view>

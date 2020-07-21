@@ -1,5 +1,5 @@
 <template>
-	<view class="homePage page flex-column">
+	<view class="homePage page flex-column" :class="{disabled: is_update_app}">
 				<view class="page-swiper">
 					<special-banner :banner-list="bannerList" :swiper-config="swiperConfig" 
 						:hasDesc="false" :scaleX="bannerList.length > 2 ? '1.1591': '1.2436'"
@@ -12,7 +12,7 @@
 				
 				<view class="qsList flex1">
 					<view class="title flex align-center">
-						<text class="tit">问答接单</text>
+						<text class="tit">问答接单1.0.1</text>
 						<text style="font-size:12px; color: #666;margin-left: 10px">- 简单选择即可</text>
 					</view>
 					<scroll-view class="listWrap" scroll-y>
@@ -25,10 +25,13 @@
 					</div>
 				</view>
 		<!-- </ygc-refresh> -->
+		<!-- #ifdef APP-PLUS -->
+		<mUpdateAppTip @updateClose="updateClose" :update_title="update_title" :is_forced_update="is_forced_update" :update_des="update_des" :update_type="update_type" :update_url="update_url" :is_update_app="is_update_app"></mUpdateAppTip>
+		<!-- #endif -->
 		
 		<view class="dialoagAD" v-if="isAlertImgShow">
 			<view class="wrap flex-column all-center">
-				<image :src="dialogObj.titleImg" mode="aspectFill" @click="goDetail(dialogObj)"></image>
+				<image :src="dialogObj.titleImg" mode="aspectFit" @click="goDetail(dialogObj)"></image>
 				<uni-icons class="closeBtn" type="close" color="#fff" size="32" @click="closeAlertImg"></uni-icons>
 			</view>
 		</view>
@@ -42,8 +45,9 @@
 	import ygcRefresh from '@/components/ygc-refresh/ygc-refresh.vue';
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import uniIcons from "@/components/uni-icons/uni-icons.vue" 
+	import mUpdateAppTip from '@/components/maozai-update/updateAppTip.vue'
 	export default {
-		components: {specialBanner,homeListItem,recommendList,ygcRefresh,uniLoadMore,uniIcons},
+		components: {specialBanner,homeListItem,recommendList,ygcRefresh,uniLoadMore,uniIcons,mUpdateAppTip},
 		data() {
 			return {
 				recomendItemHeight: '',
@@ -70,9 +74,23 @@
 				},
 				isAlertImgShow: false,
 				dialogObj: {},
+				
+				version: '1.0.0',
+				update_type:1,//0是热更新，1整包更新
+				update_url:'',//更新的地址
+				update_title:'发现新的版本，请点击升级',
+				update_des:['1.发现新的版本，请点击升级','2.发现新的版本，请点击升级'],
+				is_update_app:false,
+				is_forced_update:false,//是否强制升级
 			}
 		},
 		onShow() {
+			 // #ifdef APP-PLUS
+			plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
+				this.version = widgetInfo.version;
+				this.getCheckVersion()
+			});
+			// #endif
 			uni.$on('send', e =>{
 				this.$set(this.questions,e.index,e.data)
 			})
@@ -98,6 +116,53 @@
 			this.infiniteScroll()
 		},
 		methods: {
+			getCheckVersion(){
+				let param = {
+					"clientName": "android",
+					"version": this.version
+				}
+				this.$request('/api/checkVersion','post',param).then(res => {
+					console.log(res)
+					// 这里需要返回app下载链接
+					if(res.code == 200){
+						return
+						if(this.version == res.data.version ){return}
+						if(this.version != res.data.version && res.data.forceUpdate == 'false'){
+							this.update_type = 0
+						}else
+						if(this.version != res.data.version && res.data.forceUpdate == 'true'){
+							this.update_type = 1
+							this.is_forced_update = true
+						}
+						uni.hideTabBar() 
+						this.updateApp()
+					}else{
+						this.showToast(res.msg)
+					}
+				})
+			},
+			//app取消更新
+			updateClose() {
+					this.is_update_app = false;
+			},
+			updateApp() {
+				// #ifdef APP-PLUS  
+				plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
+						//传当前的版本号和appid与后台校验是否返回新的信息
+						// {
+						//  version: widgetInfo.version,  //  应用版本号
+						//  appid: plus.runtime.appid
+						// }
+
+						//我这里直接模拟后台传回来的值
+						this.update_type = 0//0是热更新，1整包更新
+						this.update_url = 'http://www.guangyi009.com/apk/app-release.apk'//更新的地址
+						this.is_update_app = true,///是否强制更新，不能关闭
+						this.update_title = '发现新的版本，请点击升级'
+						this.update_des = ['1.修复前端轮播图无法跳转；','2.优化个人中心布局；']
+				});
+				// #endif
+			},
 			closeAlertImg(){
 				this.isAlertImgShow = false
 			},
@@ -136,12 +201,11 @@
 			},
 			getAlertData(){ 
 				let param = {
-					"cityCode": this.param.cityCode,
 					"homeType": 3
 				}
 				this.$request('/api/view/getAlertOrCover','post',param).then(res => {
 					if(res.code == 200){
-						if(Object.keys(res.data)>0){
+						if(Object.keys(res.data).length>0){
 							let storageDate = uni.getStorageSync('date')
 							let nowDate = new Date().getTime()
 							let spaceTime = Math.floor((nowDate-storageDate)/1000/60/60)
@@ -259,6 +323,9 @@
 <style lang="scss" scoped>
 .homePage{
 	height: 100%;
+	&.disabled{
+		overflow: hidden;
+	}
 	.lists{
 		/deep/ .uni-scroll-view-content{
 			height: calc(100% + 100rpx);
@@ -287,7 +354,7 @@
 			line-height: 80rpx;
 			position: sticky;
 			top: 0;
-			z-index: 999;
+			z-index: 9;
 			background-color: #fff;
 			.tit{
 				font-size: 32rpx;

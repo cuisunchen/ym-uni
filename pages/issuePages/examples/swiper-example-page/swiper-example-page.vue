@@ -2,7 +2,7 @@
 	<view class="swiperExamplePage">
 		<view class="title flex align-center"><text class="label">{{pageTit}}</text> <text>- 点击查看详情</text></view>
 		<view class="imgWrap flex all-center">
-			<image :src="dataObj.homeTopImgUrl" mode="" @click="goDetail"></image>
+			<image :src="dataObj.homeTopImgUrl" mode="aspectFill" @click="goDetail"></image>
 		</view>
 		<view class="con">
 			<view class="card">

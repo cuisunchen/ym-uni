@@ -82,6 +82,7 @@
 					"homeType": 0,
 					// "address": ''
 				},
+				rangeType: 0,
 				pageType:'',
 				pickerValueDefault: [0, 0],   // 这里控制显示3级联动或是2级联动
 				pickerText: '全国',
@@ -119,6 +120,7 @@
 					})
 					this.form.cityCode = '0'
 					this.form.homeType = 4
+					this.rangeType = 1
 					break;
 				case 'recommend-GL1':
 					uni.setNavigationBarTitle({
@@ -126,6 +128,7 @@
 					})
 					this.form.cityCode = '0'
 					this.form.homeType = 5
+					this.rangeType = 1
 					break;
 				case 'recommend-GL2':
 					this.pickerText = '请选择发布城市'
@@ -133,6 +136,7 @@
 					　　title:'发布好运-同城活动推荐'
 					})
 					this.form.homeType = 6
+					this.rangeType = 2
 					this.pickerValueDefault = [0, 0]
 					break;
 				case 'recommend-GL3':
@@ -141,6 +145,7 @@
 					　　title:'发布好运-附近活动推荐'
 					})
 					this.form.homeType = 7
+					this.rangeType = 3
 					this.pickerValueDefault = [0, 0, 0]
 					break;
 			}
@@ -352,13 +357,14 @@
 			},
 			getReleasePrice(){
 				let param = {
-					"homeAdType": 8,
-					"rangType": 1
+					"homeAdType": this.form.homeType,
+					"rangType": this.rangeType
 				}
+				console.log(param)
 				this.$request('/api/releasePrice','post',param).then(res=>{
 					if(res.code == 200){
 						this.totalPeople = res.data.peopleTotal
-						this.unitPrice = res.data.adUnitPrice
+						this.unitPrice = res.data.initialPrice
 					}
 				})
 			},

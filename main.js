@@ -4,6 +4,9 @@ import store from './store/index.js'
 import {request,uploadRequest} from './common/utils/request.js'
 import {showToast,navigateTo} from 'common/utils/tools.js'
 
+import G_show_modal from '@/components/G_show_modal/g_show_modal.js'
+Vue.use(G_show_modal)
+
 import {checkQS,checkGL,checkPublic,checkRecommend} from 'common/utils/validate.js'
 Vue.prototype.checkQS = checkQS
 Vue.prototype.checkGL = checkGL

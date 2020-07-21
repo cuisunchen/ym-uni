@@ -123,7 +123,7 @@
 					uni.showModal({
 						title:'提示',
 						showCancel:false,
-						content:'您的抽奖次数已经用完,如需继续抽奖,请邀请更多好友,还能获得更多好友返利哦'
+						content:'抽奖次数为0, 可去分享应用, 再来试试手气'
 					})
 					return
 				}
@@ -136,11 +136,13 @@
 				 this.row = this.newArr
 				 this.row[rowIndex][columnIndex] = this.chouArr[random]
 				 this.isClick = false
-				 
-				 this.$request('/api/luckyDraw','post',{}).then(res => {
-					 console.log(res)
+				 let amount = this.row[rowIndex][columnIndex].split('元')[0]
+				 let param = {
+					 getAmount:amount*100
+				 }
+				 this.$request('/api/luckyDraw','post',param).then(res => {
 					 if(res.code == 200){
-						 this.showToast('这里需要调试接口,记得提醒我哦')
+						 this.showToast(`恭喜您获得${this.row[rowIndex][columnIndex]}元`)
 					 }else{
 						 this.showToast(res.msg,'none',3000)
 					 }

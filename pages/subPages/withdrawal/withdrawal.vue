@@ -89,7 +89,7 @@
 				userInfo:{}
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
 			this.withdrawInfo()
 		},
