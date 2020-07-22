@@ -31,7 +31,8 @@
 					"pageSize": 8
 				},
 				triggered: false,
-				isFresh: false
+				isFresh: false,
+				recomendItemHeight:null,
 			}
 		},
 		props:{
@@ -50,6 +51,17 @@
 			// #ifdef H5
 			this.param.cityCode = 440306
 			// #endif
+			uni.getSystemInfo({
+				success:(res)=>{
+					this.recomendItemHeight = (res.windowWidth-16-12)/3
+				},
+				fail:(err) =>{
+					uni.showModal({
+						title:'提示',
+						content: JSON.stringify(err)
+					})
+				}
+			})
 			this.getGoodLuckTask()
 			this.getRecommendData()
 		},
@@ -90,8 +102,7 @@
 			getRecommendData(){
 				this.$request('/api/weChat/goodLuck','post',{"cityCode": this.param.cityCode}).then(res => {
 					if(res.code == 200){
-						// this.recommendDatas = res.data
-						this.recommendList = res.data.nationwide
+						this.recommendList = res.data.sameCity
 					}else{
 						this.showToast(res.msg)
 					}
@@ -132,6 +143,7 @@
 				this.getGoodLuckTask('refresh')
 			},
 			infiniteScroll() {
+				if(this.list.length == 0){return}
 				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
 					uni.showModal({
 						title:'提示',

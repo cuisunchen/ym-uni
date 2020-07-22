@@ -83,7 +83,7 @@
 				this.$request('/api/weChat/goodLuck','post',{"cityCode": this.param.cityCode}).then(res => {
 					if(res.code == 200){
 						// this.recommendDatas = res.data
-						this.recommendList = res.data.nationwide
+						this.recommendList = res.data.nearby
 					}else{
 						this.showToast(res.msg)
 					}
@@ -124,6 +124,7 @@
 				this.getGoodLuckTask('refresh')
 			},
 			infiniteScroll() {
+				if(this.list.length == 0){return}
 				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
 					uni.showModal({
 						title:'提示',

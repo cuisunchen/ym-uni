@@ -1,6 +1,6 @@
 <template>
 	<view class="sharePage page">
-		<image class="img" src="../../../static/other/share01@2x.png" mode="aspectFill"></image>
+		<image class="img" src="../../../static/other/share01@2x.png" mode="widthFix"></image>
 	</view>
 </template>
 <script>
@@ -23,6 +23,7 @@
 
 <style lang="scss" scoped>
 .sharePage{
+	height: 100%;
 	font-size: 0;
 	.img{
 		width: 100%;

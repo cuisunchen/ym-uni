@@ -89,10 +89,6 @@
 			top: 0;
 			z-index: 9;
 		}
-		.recommendBox{
-			background-color: #fff;
-			padding: 20rpx 0 0;
-		}
 		.swiper{
 			// height: auto;
 			height: calc(100% - 50px);
@@ -100,56 +96,5 @@
 				overflow-y: scroll;
 			}
 		}
-		.lists{
-			overflow-y: scroll;
-			/deep/ .uni-scroll-view-content{
-				height: calc(100% + 50px);
-				.refresh-moudle{
-					height: 100%;
-				}
-			}
-			.listWrap{
-				padding: 0 20rpx 30rpx;
-			}
-			.nodata{
-				 margin-top: 100rpx;
-				 .img{
-						width: 150rpx;
-						height: 150rpx;
-				 }
-				 .desc{
-						color: #999;
-				 }
-			}
-		}
-		.nodata{
-			 margin-top: 100rpx;
-			 .img{
-					width: 150rpx;
-					height: 150rpx;
-			 }
-			 .desc{
-					color: #999;
-			 }
-		}
 	}
-	
-	@keyframes descAnimation {
-		0% {
-			opacity: 1;
-		}
-		25% {
-			opacity: .5;
-		}
-		50% {
-			opacity: 0;
-		}
-		75% {
-			opacity: .5;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-	
 </style>

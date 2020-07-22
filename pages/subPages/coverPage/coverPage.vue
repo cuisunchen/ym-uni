@@ -16,9 +16,7 @@
 	export default {
 		data() {
 			return {
-				dataObj:{
-					titleImg:'../../../static/place/fengPlace@2x.png'
-				},
+				dataObj:{},
 				timer: null,
 				timeNum: 5,
 				showTimer: false
@@ -138,6 +136,8 @@
 		flex: 3;
 		flex-basis: 400rpx;
 		background-color: #999;
+		background: url(../../../static/place/fengPlace@2x.png) no-repeat;
+		background-size: 100% 100%;
 		.img{
 			width: 100%;
 			height: 100%;

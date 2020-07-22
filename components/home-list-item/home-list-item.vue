@@ -64,9 +64,6 @@
 		},
 		methods:{
 			goPage(){
-				uni.navigateTo({
-					url: '@/pages/subPages/detail/detail'
-				})
 				this.$emit('click')
 			}
 		}

@@ -142,7 +142,7 @@
 				 }
 				 this.$request('/api/luckyDraw','post',param).then(res => {
 					 if(res.code == 200){
-						 this.showToast(`恭喜您获得${this.row[rowIndex][columnIndex]}元`)
+						 this.showToast(`恭喜您获得${this.row[rowIndex][columnIndex]}`)
 					 }else{
 						 this.showToast(res.msg,'none',3000)
 					 }

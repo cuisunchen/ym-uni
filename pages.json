@@ -217,7 +217,6 @@
 				"path" : "pages/subPages/collectionAD/collectionAD",
 				"style" : {
 					"navigationBarTitleText": "收藏",
-					"enablePullDownRefresh": true,
 					"app-plus": {
 						"bounce": "none",
 						"titleNView": {

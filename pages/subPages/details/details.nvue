@@ -192,6 +192,7 @@
 				})
 			},
 			handleLottery(){
+				if(this.timeNum == -1){return}
 				this.showTimer = true
 				clearInterval(this.timer)
 				this.timer = setInterval(() => {

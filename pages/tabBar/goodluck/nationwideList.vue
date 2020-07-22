@@ -71,9 +71,9 @@
 			getGoodLuckTask(type){
 				this.$request('/api/view/goodLuckTask','post',this.param).then(res => {
 					uni.hideLoading()
+					this.triggered = false
+					this.isFresh = false
 					if(res.code == 200){
-						this.triggered = false
-						this.isFresh = false
 						if(type == 'loadmore'){
 							this.list.push(...res.data.homeAdList)
 						}else{
@@ -109,6 +109,7 @@
 				this.getGoodLuckTask('refresh')
 			},
 			infiniteScroll() {
+				if(this.list.length == 0){return}
 				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
 					uni.showModal({
 						title:'提示',
@@ -124,6 +125,7 @@
 					})
 					return
 				}
+				if(this.pullupLoadingType == 'noMore'){return}
 				this.param.pagesNum ++
 				this.pullupLoadingType = 'loading'
 				this.getGoodLuckTask('loadmore')

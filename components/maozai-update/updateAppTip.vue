@@ -57,7 +57,6 @@
 			downloadBtn: function() {
 				//整包更新打开浏览器
 				if(this.update_type == 1) {
-					console.log(this.update_url)
 					plus.runtime.openURL(encodeURI(this.update_url));
 					this.closeUpdate()
 					return
@@ -111,6 +110,7 @@
 			//取消更新
 			closeUpdate:function() {
 				if(parseFloat(this.download_num_ed) > 0) {
+					this.$emit('updateClose','升级中，请勿关闭~')
 					return getApp().globalData.hint('升级中，请勿关闭~');
 				}
 				

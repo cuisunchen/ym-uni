@@ -9,7 +9,7 @@
 				</view>
 			</view>
 			
-			<image class="shareImg" src="../../../static/other/shareImg.png" mode="aspectFill"></image>
+			<image class="shareImg" src="../../../static/other/shareImg.png" mode="widthFix"></image>
 			<view class="bot flex">
 				<view class="leftCon flex1">
 					<view class="title">今日友米</view>
@@ -181,6 +181,7 @@
 	}
 	.shareImg{
 		width: 100%;
+		// margin: 30rpx 0;
 	}
 	.bot{
 		margin: 0 16rpx;

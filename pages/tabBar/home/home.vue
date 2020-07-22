@@ -12,7 +12,7 @@
 				
 				<view class="qsList flex1">
 					<view class="title flex align-center">
-						<text class="tit">问答接单1.0.1</text>
+						<text class="tit">问答接单</text>
 						<text style="font-size:12px; color: #666;margin-left: 10px">- 简单选择即可</text>
 					</view>
 					<scroll-view class="listWrap" scroll-y>
@@ -75,11 +75,11 @@
 				isAlertImgShow: false,
 				dialogObj: {},
 				
-				version: '1.0.0',
+				version: '',
 				update_type:1,//0是热更新，1整包更新
 				update_url:'',//更新的地址
 				update_title:'发现新的版本，请点击升级',
-				update_des:['1.发现新的版本，请点击升级','2.发现新的版本，请点击升级'],
+				update_des:[],
 				is_update_app:false,
 				is_forced_update:false,//是否强制升级
 			}
@@ -105,9 +105,8 @@
 				title:'加载中'
 			})
 			this.param.cityCode = uni.getStorageSync('location')? JSON.parse(uni.getStorageSync('location')).adcode : '440306'
-			this.getAlertData()
 			this.getDatas()
-			this.getRecommendData()
+			this.getRecommendData()  
 		},
 		onPullDownRefresh() {
 			this.refresh()
@@ -122,28 +121,65 @@
 					"version": this.version
 				}
 				this.$request('/api/checkVersion','post',param).then(res => {
-					console.log(res)
 					// 这里需要返回app下载链接
 					if(res.code == 200){
-						return
+						let downloadTxt;
 						if(this.version == res.data.version ){return}
 						if(this.version != res.data.version && res.data.forceUpdate == 'false'){
 							this.update_type = 0
+							downloadTxt = `版本号${res.data.version}精彩不容错过, 请及时更新!`
+							this.update_des.push(downloadTxt)
 						}else
 						if(this.version != res.data.version && res.data.forceUpdate == 'true'){
 							this.update_type = 1
 							this.is_forced_update = true
+							downloadTxt = `版本号${res.data.version}最新版本才能正常使用, 请及时更新!`
+							this.update_des.push(downloadTxt)
+							uni.hideTabBar()
+							this.update_url = res.data.downloadLink
+							this.updateApp()
+							return
+						}else{
+							this.getAlertData()
+							return
 						}
-						uni.hideTabBar() 
-						this.updateApp()
+						//  缓存非强制更新下载弹框弹出时的时间   保证2个小时弹出一次
+						let storageDate = uni.getStorageSync('updateDate')
+						let nowDate = new Date().getTime()
+						let spaceTime = Math.floor((nowDate-storageDate)/1000/60/60)
+						if(storageDate){
+							if(spaceTime > 2 || spaceTime == 2){ // 每次弹出后更新缓存时间,清除缓存中弹框状态
+								this.update_url = res.data.downloadLink
+								this.updateApp()
+								wx.setStorage({
+									key: 'updateDate',
+									data: nowDate
+								})
+							}
+						}else{
+							this.update_url = res.data.downloadLink
+							this.updateApp()
+							wx.setStorage({
+								key: 'updateDate',
+								data: nowDate
+							})
+						}
+						// uni.clearStorage()  
+						// this.update_url = res.data.downloadLink
+						// this.updateApp()
 					}else{
 						this.showToast(res.msg)
 					}
 				})
 			},
 			//app取消更新
-			updateClose() {
-					this.is_update_app = false;
+			updateClose(e) {
+				if(e){
+					this.showToast(e)
+					return
+				}
+				this.is_update_app = false;
+				uni.showTabBar()
 			},
 			updateApp() {
 				// #ifdef APP-PLUS  
@@ -155,11 +191,12 @@
 						// }
 
 						//我这里直接模拟后台传回来的值
-						this.update_type = 0//0是热更新，1整包更新
-						this.update_url = 'http://www.guangyi009.com/apk/app-release.apk'//更新的地址
+						// this.update_type = 0//0是热更新，1整包更新
+						// this.update_url = 'http://www.guangyi009.com/apk/app-release.apk'//更新的地址
 						this.is_update_app = true,///是否强制更新，不能关闭
 						this.update_title = '发现新的版本，请点击升级'
-						this.update_des = ['1.修复前端轮播图无法跳转；','2.优化个人中心布局；']
+						
+						// this.update_des = []
 				});
 				// #endif
 			},
@@ -205,6 +242,7 @@
 				}
 				this.$request('/api/view/getAlertOrCover','post',param).then(res => {
 					if(res.code == 200){
+						if(this.is_update_app){return}
 						if(Object.keys(res.data).length>0){
 							let storageDate = uni.getStorageSync('date')
 							let nowDate = new Date().getTime()
@@ -276,6 +314,7 @@
 				})
 			},
 			refresh() {
+				if(this.is_update_app){return}
 				this.questions=[]
 				this.param.pageSize = 10
 				this.param.pagesNum = 1
@@ -286,6 +325,7 @@
 				this.getDatas('refresh')
 			},
 			infiniteScroll() {
+				if(this.questions.length == 0){return}
 				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
 					uni.showModal({
 						title:'提示',
@@ -378,6 +418,7 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+		z-index: 10;
 		background-color: rgba(0,0,0, .5);
 		.wrap{
 			position: relative; 
