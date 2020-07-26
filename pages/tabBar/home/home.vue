@@ -1,30 +1,29 @@
 <template>
 	<view class="homePage page flex-column" :class="{disabled: is_update_app}">
-				<view class="page-swiper">
-					<special-banner :banner-list="bannerList" :swiper-config="swiperConfig" 
-						:hasDesc="false" :scaleX="bannerList.length > 2 ? '1.1591': '1.2436'"
-						@click="goDetail"/>
-				</view>
-				
-				<view class="recommendBox">
-					<recommend-list :data-obj="recommendList" @click="goDetail"></recommend-list>
-				</view>
-				
-				<view class="qsList flex1">
-					<view class="title flex align-center">
-						<text class="tit">问答接单</text>
-						<text style="font-size:12px; color: #666;margin-left: 10px">- 简单选择即可</text>
-					</view>
-					<scroll-view class="listWrap" scroll-y>
-						<home-list-item v-for="(item,index) in questions" :key="item.id" :data-obj="item" @click="qsDetail(item,index)"></home-list-item>
-						<uni-load-more v-if="pullupLoadingType == 'loading'" :status="pullupLoadingType"></uni-load-more>
-					</scroll-view>
-					<div class="nodata flex-column align-center" v-if="questions.length == 0">
-						<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
-						<view class="desc">暂无数据</view>
-					</div>
-				</view>
-		<!-- </ygc-refresh> -->
+		<view class="page-swiper">
+			<special-banner :banner-list="bannerList" :swiper-config="swiperConfig" 
+				:hasDesc="false" :scaleX="bannerList.length > 2 ? '1.1591': '1.2436'"
+				@click="goDetail"/>
+		</view>
+		
+		<view class="recommendBox">
+			<recommend-list :data-obj="recommendList" @click="goDetail"></recommend-list>
+		</view>
+		
+		<view class="qsList flex1">
+			<view class="title flex align-center">
+				<text class="tit">问答接单</text>
+				<text style="font-size:12px; color: #666;margin-left: 10px">- 简单选择即可</text>
+			</view>
+			<scroll-view class="listWrap" scroll-y>
+				<home-list-item v-for="(item,index) in questions" :key="item.id" :data-obj="item" @click="qsDetail(item,index)"></home-list-item>
+				<uni-load-more v-if="pullupLoadingType == 'loading'" :status="pullupLoadingType"></uni-load-more>
+			</scroll-view>
+			<div class="nodata flex-column align-center" v-if="questions.length == 0">
+				<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
+				<view class="desc">暂无数据</view>
+			</div>
+		</view>
 		<!-- #ifdef APP-PLUS -->
 		<mUpdateAppTip @updateClose="updateClose" :update_title="update_title" :is_forced_update="is_forced_update" :update_des="update_des" :update_type="update_type" :update_url="update_url" :is_update_app="is_update_app"></mUpdateAppTip>
 		<!-- #endif -->
@@ -109,6 +108,7 @@
 			this.getRecommendData()  
 		},
 		onPullDownRefresh() {
+			
 			this.refresh()
 		},
 		onReachBottom(){  //上拉触底函数
@@ -123,7 +123,7 @@
 				this.$request('/api/checkVersion','post',param).then(res => {
 					// 这里需要返回app下载链接
 					if(res.code == 200){
-						let downloadTxt;
+						let downloadTxt = '';
 						if(this.version == res.data.version ){return}
 						if(this.version != res.data.version && res.data.forceUpdate == 'false'){
 							this.update_type = 0
@@ -131,7 +131,7 @@
 							this.update_des.push(downloadTxt)
 						}else
 						if(this.version != res.data.version && res.data.forceUpdate == 'true'){
-							this.update_type = 1
+							this.update_type = 0
 							this.is_forced_update = true
 							downloadTxt = `版本号${res.data.version}最新版本才能正常使用, 请及时更新!`
 							this.update_des.push(downloadTxt)
@@ -164,9 +164,6 @@
 								data: nowDate
 							})
 						}
-						// uni.clearStorage()  
-						// this.update_url = res.data.downloadLink
-						// this.updateApp()
 					}else{
 						this.showToast(res.msg)
 					}
@@ -179,6 +176,16 @@
 					return
 				}
 				this.is_update_app = false;
+				//  一下是更新弹框出现时禁止下拉刷新
+				const pages = getCurrentPages();
+				const page = pages[pages.length - 1];  
+				const currentWebview = page.$getAppWebview();
+				currentWebview.setStyle({  
+				  pullToRefresh: {  
+				    support: !this.is_update_app,  
+				    style: plus.os.name === 'Android' ? 'circle' : 'default'  
+				  }  
+				}); 
 				uni.showTabBar()
 			},
 			updateApp() {
@@ -196,6 +203,16 @@
 						this.is_update_app = true,///是否强制更新，不能关闭
 						this.update_title = '发现新的版本，请点击升级'
 						
+						//  一下是更新弹框出现时禁止下拉刷新
+						const pages = getCurrentPages();
+						const page = pages[pages.length - 1];  
+						const currentWebview = page.$getAppWebview();
+						currentWebview.setStyle({  
+						  pullToRefresh: {  
+						    support: !this.is_update_app,  
+						    style: plus.os.name === 'Android' ? 'circle' : 'default'  
+						  }  
+						});  
 						// this.update_des = []
 				});
 				// #endif
@@ -314,7 +331,10 @@
 				})
 			},
 			refresh() {
-				if(this.is_update_app){return}
+				if(this.is_update_app){
+					// uni.stopPullDownRefresh();
+					return
+				}
 				this.questions=[]
 				this.param.pageSize = 10
 				this.param.pagesNum = 1

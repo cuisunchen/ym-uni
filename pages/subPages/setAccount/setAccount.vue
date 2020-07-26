@@ -73,9 +73,6 @@
 					this.isNoInput = false
 				}
 			}
-			
-			console.log(opt.type)
-			
 		},
 		methods: {
 			submit(){

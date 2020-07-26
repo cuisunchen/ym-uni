@@ -217,7 +217,9 @@
 			},
 			onPageFinish(){
 				uni.hideLoading()
-				this.handleLottery()
+				if(this.type == 'goodLuck'){
+					this.handleLottery()
+				}
 			},
 			goBack(){
 				//  封面进入详情后,点击返回回到首页

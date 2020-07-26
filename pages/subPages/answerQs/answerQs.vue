@@ -1,7 +1,10 @@
 <template>
 	<view class="answerQsPage page">
 		<view class="wrap">
-			<view class="qs">问题: {{qsInfo.problem}}</view>
+			<view class="qs flex">
+				<text class="flex-shrink label">问题: </text>
+				<text class="flex1">{{qsInfo.problem}}</text>
+			</view>
 			<view class="answer flex flex-between align-center">
 				<text class="label">您选择的答案是</text>
 				<text class="as">{{selectedVal}}</text>
@@ -61,7 +64,7 @@
 				this.$request('/api/view/replyQA','post',param).then(res => {
 						this.submitLoading = false
 						this.dataObj.tags = '已读'
-						
+						// console.log(res)
 						if(res.code == 200){
 							if(res.data.isFinish){
 								this.dataObj.status = '已完成'
@@ -149,12 +152,16 @@
 	
 	.wrap{
 		margin-top: 30rpx;
-		padding: 0 20rpx 20rpx;
+		padding: 20rpx;
 		border-radius: 10rpx;
 		background-color: #f6f6f6;
 		.qs{
 			color: #20a320;
-			line-height: 100rpx;
+			line-height: 36rpx;
+			margin-bottom: 20rpx;
+			.label{
+				margin-right: 8rpx;
+			}
 		}
 		.answer{
 			height: 80rpx;

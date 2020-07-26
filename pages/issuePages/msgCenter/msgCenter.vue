@@ -111,5 +111,15 @@ page{
 		border-radius: 10rpx;
 		background-color: #fff;
 	}
+	.nodata{
+		 margin-top: 100rpx;
+		 .img{
+				width: 150rpx;
+				height: 150rpx;
+		 }
+		 .desc{
+				color: #999;
+		 }
+	}
 } 
 </style>

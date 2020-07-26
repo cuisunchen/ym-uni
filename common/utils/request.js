@@ -1,7 +1,6 @@
 import urlConfig from './config.js'
 
 const headers = {}
-const PORT1 = '/baseinfo'
 
 
 const request = (url, method='post', data, hasToken="true") => {

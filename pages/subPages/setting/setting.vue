@@ -1,7 +1,7 @@
 <template>
 	<view class="settingPage page">
 		<view class="cellsWrap">
-			<cell icon-path="../../../static/gw.png" title="当前版本" desc="1.0.0" :is-icon-show="false"></cell>
+			<cell icon-path="../../../static/gw.png" title="当前版本" :desc="version" :is-icon-show="false"></cell>
 			<cell v-for="(item,index) in lists" :key="index" :icon-path="item.iconUrl"  :desc-color="item.color"
 					:title="item.title" :desc="item.desc" :is-icon-show="item.isIconShow" @click="itemClick(item)"></cell>
 			<!-- <cell icon-path="../../../static/gw.png" title="官网" desc="" :is-icon-show="false" @click="copy"></cell> -->

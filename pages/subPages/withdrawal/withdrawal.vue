@@ -98,6 +98,10 @@
 		},
 		methods: {
 			applyWithdraw(){
+				if(this.withdrawalTypeIndex == 0){
+					this.showToast('暂时不支持微信在线提现,请选择支付宝提现')
+					return
+				}
 				this.btnLoading = true
 				let param = {
 					"payName": this.withdrawalTypeIndex == 0 ? 'weChat' : 'aliPay',

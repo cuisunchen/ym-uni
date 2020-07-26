@@ -70,15 +70,33 @@
 			},
 			pwdLogin(){
 				if(!this.form.phone){
-					this.showToast('请输入手机号')
+					uni.showToast({
+						title: '请输入手机号',
+						duration: 2000,
+						position: 'top'
+					})
 					return
-				}else if(!this.form.password){
-					this.showToast('请输入登录码')
+				}else
+				if(!(/^1[3456789]\d{9}$/.test(this.form.phone))){ 
+				 uni.showToast({
+				 	title: '手机号格式错误',
+					duration: 2000,
+					position: 'top'
+				 })
+				 return
+				}
+				if(!this.form.password){
+					uni.showToast({
+						title: '请输入登录码',
+						duration: 2000,
+						position: 'top'
+					})
 					return
 				}
 				this.loading1 = true;
 				this.$request('/api/pwdLogin','post',this.form,false).then(res => {
 					this.loading1 = false;
+					
 					if(res.code == 200){
 						uni.setStorage({
 							key: 'token',

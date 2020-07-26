@@ -114,7 +114,7 @@
 					return getApp().globalData.hint('升级中，请勿关闭~');
 				}
 				
-				this.$emit('updateClose',{})
+				this.$emit('updateClose','')
 			}
 		}
 	}

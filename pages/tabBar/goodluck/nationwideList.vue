@@ -44,6 +44,7 @@
 		},
 		created() {
 			uni.$on('sendGL', e =>{
+				console.log(e)
 				this.$set(this.list,e.index,e.data)
 			})
 			this.isFresh = false
