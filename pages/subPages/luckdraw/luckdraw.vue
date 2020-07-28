@@ -102,7 +102,7 @@
 			}
 		},
 		onShow () {
-			this.row = this.default
+			this.row = this.default  
 			let arr = this.randomArray(this.allArr)
 			for (const item of arr) {
 				 let child = this.randomArray(item)
@@ -143,6 +143,7 @@
 				 this.$request('/api/luckyDraw','post',param).then(res => {
 					 if(res.code == 200){
 						 this.showToast(`恭喜您获得${this.row[rowIndex][columnIndex]}`)
+						 this.getLuckDrawTimes() 
 					 }else{
 						 this.showToast(res.msg,'none',3000)
 					 }

@@ -63,6 +63,7 @@
 				],
 				dataObj:{},
 				type:'',
+				tabType: '',
 				screenHeight: null,
 				imgHeight:null,
 				statusBarHeight:null,
@@ -79,7 +80,7 @@
 			})
 			this.dataObj = JSON.parse(decodeURIComponent(option.param))
 			this.dataIndex = option.index
-			
+			this.tabType = option.tabType
 			this.isCollectAd()
 			if(this.dataObj.bigImg.indexOf('jpg') < 0 && this.dataObj.bigImg.indexOf('jpeg') < 0 && this.dataObj.bigImg.indexOf('png') < 0){
 				this.dataObj.webViewShow = true
@@ -188,7 +189,15 @@
 						'data':this.dataObj,
 						'index':this.dataIndex,
 					}
-					uni.$emit('sendGL',paras)
+					// uni.$emit('sendGL',paras)
+					if(this.tabType = 1){
+						uni.$emit('sendNation',paras)
+					}else
+					if(this.tabType = 2){
+						uni.$emit('sendSameCity',paras)
+					}else{
+						uni.$emit('sendNearby',paras)
+					}
 				})
 			},
 			handleLottery(){

@@ -43,9 +43,8 @@
 			}
 		},
 		created() {
-			uni.$on('sendGL', e =>{
-				console.log(e)
-				this.$set(this.list,e.index,e.data)
+			uni.$on('sendNation', e =>{ 
+				this.$set(this.list,e.index,e.data)  
 			})
 			this.isFresh = false
 			// #ifdef APP-PLUS
@@ -141,7 +140,7 @@
 				this.userClick(data,index)
 				
 				uni.navigateTo({
-					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&index='+ index
+					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&tabType=1&index='+ index
 				})
 			},
 			goDetail(data){

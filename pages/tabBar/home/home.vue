@@ -124,6 +124,7 @@
 					// 这里需要返回app下载链接
 					if(res.code == 200){
 						let downloadTxt = '';
+						this.update_des = []   
 						if(this.version == res.data.version ){return}
 						if(this.version != res.data.version && res.data.forceUpdate == 'false'){
 							this.update_type = 0
@@ -143,6 +144,7 @@
 							this.getAlertData()
 							return
 						}
+						// this.updateApp()
 						//  缓存非强制更新下载弹框弹出时的时间   保证2个小时弹出一次
 						let storageDate = uni.getStorageSync('updateDate')
 						let nowDate = new Date().getTime()

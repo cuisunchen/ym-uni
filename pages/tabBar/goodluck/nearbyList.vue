@@ -35,6 +35,9 @@
 			}
 		},
 		created() {
+			uni.$on('sendNearby', e =>{
+				this.$set(this.list,e.index,e.data)
+			})
 			this.isFresh = false
 			// #ifdef APP-PLUS
 			this.param.cityCode = this.$parent.cityCode
@@ -99,7 +102,7 @@
 				this.userClick(data)
 				
 				uni.navigateTo({
-					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&index='+ index
+					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&tabType=3&index='+ index
 				})
 			},
 			goDetail(data){

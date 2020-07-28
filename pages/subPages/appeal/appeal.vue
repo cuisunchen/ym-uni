@@ -5,7 +5,7 @@
 					<text>申诉</text> - 广告有问题,可以告诉我们
 			 </view>
 			 <view class="textareaBox">
-					<textarea class="textarea" v-model="content" placeholder-class="holderClass" placeholder="请输入您的问题" />
+					<textarea class="textarea" v-model="content" placeholder-class="holder" placeholder="请输入您的问题" />
 					<appeal-upload @choose="imgChoose"></appeal-upload>
 			 </view>
 
@@ -81,6 +81,10 @@
 			 color: #333;
 			 font-size: 28rpx;
 			 margin-bottom: 20rpx;
+		}
+		.holder{
+			color: #999;
+			font-size: 24rpx;
 		}
 		.textareaBox{
 			 padding: 16rpx;

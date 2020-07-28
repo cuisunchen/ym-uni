@@ -1,5 +1,6 @@
 <template>
 	<view class="downloadPage page" id="_poster">
+		<view class="topTit flex all-center">您的好友邀请您加入 - 今日友米</view>
 		<view class="contentWrap" id="contentWrap">
 			<view class="userInfo flex">
 				<image class="img" src="../../../static/place/fang@2x.png" mode=""></image>
@@ -17,33 +18,8 @@
 					<view class="injoin">微信小程序搜索"米圈日记"</view>
 					<view class="injoin">或扫描右方二维码即可加入</view>
 				</view>
-				<view class="code">
-					<tki-qrcode
-					    ref="qrcode"
-					    cid="qrcode"
-							:val="val"
-							:size="size"
-							:background="background"
-							:foreground="foreground"
-							:pdground="pdground"
-							:icon="icon"
-							:iconSize="iconsize"
-							:lv="lv" 
-							:onval="onval"
-							:loadMake="loadMake"
-							/>
-				</view>
-			</view>
-			<view class="tip">
-				<view class="title">温馨提示:</view>
-				<view class="con">
-					1. 邀请好友可以提升等级,等级越高,分配的广告越多,等级达到5级以后,可以无限制浏览广告赚取收益;
-				</view>
-				<view class="con">
-					2. 每邀请一位好友可以获取一次好运抽奖的机会,最高可获取奖励500元;
-				</view>
-				<view class="con">
-					3. 邀请好友越多获取好友返利就越多,如果您有50名好友,那么每天您的好友会给您带来70~200元的收益,好友越多收益越多。
+				<view class="code flex all-center">
+					<image :src="qrcode" mode="aspectFill"></image>
 				</view>
 			</view>
 		</view>
@@ -51,9 +27,7 @@
 </template>
 
 <script>
-	import tkiQrcode from "@/components/tki-qrcode/tki-qrcode.vue"
 	export default {
-		components:{tkiQrcode},
 		data() {
 			return {
 				//  二维码组件配置
@@ -70,10 +44,13 @@
 				onval: true,
 				loadMake: true,
 				
-				userInfo: {}
+				testNum : 1,
+				userInfo: {},
+				qrcode:'',
+				codeShow: false,
 			}
 		},
-		onLoad() {
+		onLoad() { 
 			this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
 			this.val = 'https://www.guangyi009.com/mp/mp?agentCode=' + this.userInfo.agentCode;
 			let systemInfo = uni.getSystemInfo({
@@ -81,12 +58,40 @@
 					this.statusBarHeight = data.statusBarHeight + 45
 				}
 			})
+			this.getpic()
 		},
 		onNavigationBarButtonTap() {
-			
 			this.toImage();
 		},
 		methods: {
+			getpic(){
+				uni.request({
+					url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential',
+					 data: {
+						 appid: 'wx65ce2486390a10b3', // 小程序appid
+						 secret: '72a0c2867712bcae6089e3cf46482fa9' // 小程序秘钥
+					 },
+					 success:(res)=> {
+						 console.log(this.userInfo.agentCode)
+						uni.request({
+							 url: 'https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?access_token=' + res.data.access_token,
+							 method: 'POST',
+							 responseType:"arraybuffer",
+							 data: {
+								 'path': "/pages/index/main?agentCode=" + this.userInfo.agentCode,
+								 "width": 430
+							 },
+							 success:(res)=> {
+								 if (res.statusCode == 200) {
+									 const arrayBuffer = new Uint8Array(res.data)
+									 let data = uni.arrayBufferToBase64(arrayBuffer);
+									 this.qrcode = 'data:image/jpeg;base64,' + data
+								 } 
+							 }
+						 })
+					 }
+				})
+			},
 			toImage() {
 					/* 获取屏幕信息 */
 					let ws = this.$mp.page.$getAppWebview();
@@ -144,8 +149,18 @@
 <style lang="scss" scoped>
 .downloadPage{
 	height: 100%;
+	padding-top: 40rpx;
+	overflow-y: scroll;
 	position: relative;
 	background-color: #95ae84;
+	.topTit{
+		height: 80rpx;
+		margin: 0 30rpx;
+		font-size: 28rpx;
+		color: #333;
+		border-radius: 8rpx;
+		background-color: #FFFFFF;
+	}
 	.contentWrap{
 		height: 100%;
 		overflow-y: scroll;
@@ -155,7 +170,7 @@
 		color: red;
 	}
 	.userInfo{
-		padding: 30rpx 30rpx 0 30rpx;
+		padding: 50rpx 30rpx 0 30rpx;
 		.img{
 			width: 120rpx;
 			height: 120rpx;
@@ -181,11 +196,11 @@
 	}
 	.shareImg{
 		width: 100%;
-		// margin: 30rpx 0;
+		margin: 20rpx 0;
 	}
 	.bot{
 		margin: 0 16rpx;
-		padding: 30rpx;
+		padding: 30rpx ;
 		border-radius: 10rpx;
 		background-color: #fff;
 		.leftCon{
@@ -208,20 +223,11 @@
 		.code{
 			width: 250rpx;
 			height: 250rpx;
+			image{
+				width: 100%;
+				height: 100%;
+			}
 		}
 	}
-	.tip{
-		padding: 0 20rpx;
-		margin-top: 20rpx;
-		.title{
-			color: red;
-		}
-		.con{
-			color: #fff;
-			font-size: 24rpx;
-		}
-	}
-	
-
 }
 </style>

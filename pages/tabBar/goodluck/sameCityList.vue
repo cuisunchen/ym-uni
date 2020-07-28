@@ -6,11 +6,11 @@
 			<recommend-list :is-title-show="false" :data-obj="recommendList" @click="goDetail"></recommend-list>
 		</view>
 		
-		<view class="listWrap" v-if="list.length > 0">
-			<gl-list-item v-for="(item,index) in list" :key="index" :data-obj="item" @click="glDetail(item,index)"></gl-list-item>
+		<view class="listWrap" v-if="cityList.length > 0">
+			<gl-list-item v-for="(item,index) in cityList" :key="index" :data-obj="item" @click="glDetail(item,index)"></gl-list-item>
 			<uni-load-more v-if="pullupLoadingType == 'loading'" :status="pullupLoadingType"></uni-load-more>
 		</view>
-		<div class="nodata flex-column align-center" v-if="list.length == 0">
+		<div class="nodata flex-column align-center" v-if="cityList.length == 0">
 				<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
 				<view class="desc">暂无数据</view>
 		</div>
@@ -21,7 +21,7 @@
 	export default {
 		data(){
 			return{
-				list: [],
+				cityList: [],
 				recommendList: [],
 				pullupLoadingType:'more',
 				param:{
@@ -44,6 +44,9 @@
 			}
 		},
 		created() {
+			uni.$on('sendSameCity', e =>{
+				this.$set(this.cityList,e.index,e.data)
+			})
 			this.isFresh = false
 			// #ifdef APP-PLUS
 			this.param.cityCode = this.$parent.cityCode
@@ -74,7 +77,7 @@
 						return
 					}
 					item.clickNum ++
-					this.$set(this.list,index,item)
+					this.$set(this.cityList,index,item)
 				})
 			},
 			getGoodLuckTask(type){
@@ -84,9 +87,9 @@
 					this.isFresh = false
 					if(res.code == 200){
 						if(type == 'loadmore'){
-							this.list.push(...res.data.homeAdList)
+							this.cityList.push(...res.data.homeAdList)
 						}else{
-							this.list = res.data.homeAdList
+							this.cityList = res.data.homeAdList
 						}
 						
 						if(res.data.sumPage == this.param.pagesNum || res.data.sumPage < this.param.pagesNum){
@@ -118,7 +121,7 @@
 				this.userClick(data)
 				
 				uni.navigateTo({
-					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&index='+ index
+					url: '../../subPages/details/details?param='+ encodeURIComponent(JSON.stringify(data)) + '&type=goodLuck&tabType=2&index='+ index
 				})
 			},
 			goDetail(data){
@@ -143,7 +146,7 @@
 				this.getGoodLuckTask('refresh')
 			},
 			infiniteScroll() {
-				if(this.list.length == 0){return}
+				if(this.cityList.length == 0){return}
 				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
 					uni.showModal({
 						title:'提示',

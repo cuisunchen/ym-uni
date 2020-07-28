@@ -48,7 +48,8 @@ const request = (url, method='post', data, hasToken="true") => {
 				}).catch(parmas => {
 					console.log('错误')
 					uni.showToast({
-						title:'连接失败,请检查网络是否正常'
+						title:'连接失败,请检查网络是否正常',
+						icon: 'none'
 					})
 		　　　　reject(response)
 		　　})

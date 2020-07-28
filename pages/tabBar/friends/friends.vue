@@ -15,13 +15,13 @@
 				<view class="rank">昨日收益排名 <text>NO1</text></view>
 				<view class="userInfo flex align-center">
 					 <image class="img" src="../../../static/huangguan@2x.png" alt="" srcset=""></image>
-					 <text class="mobile">{{noOneInfo.phone}}</text>
-					 <text class="tag">LV.{{noOneInfo.level}}</text>
+					 <text class="mobile">{{noOneInfo.topPhone}}</text>
+					 <text class="tag">LV.{{noOneInfo.level || 5}}</text>
 				</view>
 				<view class="con flex">
-					 <view class="friendsNum flex align-center"><text>好友数量:</text> <text class="num">{{noOneInfo.friendSum}}人</text></view>
+					 <view class="friendsNum flex align-center"><text>好友数量:</text> <text class="num">{{noOneInfo.friendNum}}人</text></view>
 					 <view class="income flex align-center" >
-							<text>收益金额:</text> <text class="num">{{noOneInfo.amount}}元</text>
+							<text>收益金额:</text> <text class="num">{{noOneInfo.makeMoney || '-'}}元</text>
 					 </view>
 				</view>
 				<view class="shareBox flex">
@@ -87,10 +87,7 @@
 				Promise.all([this.getNoOneInfo(),this.getFriendList()]).then(res =>{
 					uni.hideLoading()
 					uni.stopPullDownRefresh();
-					let arr = res[0].list.sort((item1,item2) => {
-						 return item2.amount - item1.amount
-					})
-					this.noOneInfo = arr[0]
+					this.noOneInfo = res[0]
 					this.friendsList = res[1].friendList
 					this.myInfo = res[1].userInfo
 					if(res[1].userInfo.level == 1){
@@ -109,7 +106,7 @@
 			},
 			getNoOneInfo(){
 				return new Promise((resolve,reject) => {
-					this.$request('/api/view/leaderboard','get',{}).then(res => {
+					this.$request('/api/view/friendTopUser','get',{}).then(res => {
 						if(res.code == 200){
 							resolve(res.data)
 						}else{
