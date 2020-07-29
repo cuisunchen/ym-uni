@@ -1,61 +1,55 @@
 <template>
 	<view class="minePage">	
-		<!-- <ygc-refresh class="lists"
-				@onRefresh="refresh"> -->
-				<image class="img" src="../../../static/mineBg.jpeg" mode="aspectFill"></image>
-				<view class="main">
-					<view class="avatar" @click="chooseImg">
-						<image :src="userInfo.avatarUrl" mode="aspectFill"></image>
+		<image class="img" src="../../../static/mineBg.jpeg" mode="aspectFill"></image>
+		<view class="main">
+			<view class="avatar" @click="chooseImg">
+				<image :src="userInfo.avatarUrl" mode="aspectFill"></image>
+			</view>
+			
+			<view class="userInfoBox">
+				<view class="admin">{{userInfo.nickName}}</view>
+				<view class="level" @click="goSubPage('rebate')">
+					<text>LV{{userInfo.vipLevel}}</text> - 等级返利规则
+				</view>
+				<view class="moneyBox flex">
+					<view class="todayInto flex1" @click="goSubPage('todayProfit')">
+						<view class="tit">今日收益</view>
+						<view class="num" >{{userInfo.todayAmount}}</view>
 					</view>
-					
-					<view class="userInfoBox">
-						<view class="admin">{{userInfo.nickName}}</view>
-						<view class="level" @click="goSubPage('rebate')">
-							<text>LV1</text> - 等级返利规则
-						</view>
-						<view class="moneyBox flex">
-							<view class="todayInto flex1" @click="goSubPage('todayProfit')">
-								<view class="tit">今日收益</view>
-								<view class="num" >{{userInfo.todayAmount}}</view>
-							</view>
-							<view class="wallet flex1" @click="goSubPage('totalProfit')">
-								<view class="tit">全部收益</view>
-								<view class="num">{{userInfo.countAmount}}</view>
-							</view>
-							<view class="withdrawal flex1" @click="goSubPage('withdrawal')">
-								<view class="tit">账户余额<text class="drawal">(去提现)</text></view>
-								<view class="num">{{userInfo.userSurplus}}</view>
-							</view>
-						</view>
+					<view class="wallet flex1" @click="goSubPage('totalProfit')">
+						<view class="tit">全部收益</view>
+						<view class="num">{{userInfo.countAmount}}</view>
 					</view>
-					
-					<view class="cells">
-						<cell icon-path="../../../static/xiaox.png" title="当前用户人数:" :desc="String(userInfo.countPeople)" desc-color="red" desc-size="20" right-text="立即发布" border-bottom-color="transparent" :is-icon-show="false" @click="goIssuePage"></cell>
-						
-						<view class="group1">
-							<cell icon-path="../../../static/fx1.png" title="分享应用" desc="- 提高会员等级" @click="goSubPage('share')"></cell>
-							<cell icon-path="../../../static/cj.png" title="好运抽奖" desc="- 最高奖励500元" @click="goSubPage('luckdraw')"></cell>
-							<cell icon-path="../../../static/ss.png" title="每日签到" desc="- 连续7日,最高奖励100元"  border-bottom-color="transparent" @click="signIn"></cell>
-						</view>
-						
-						<view class="group2">
-							<cell icon-path="../../../static/tz.png" title="我的消息" :desc-color="userInfo.unreadNum > 0?'red': ''" :desc="userInfo.unreadNum == 0 ? '- 未有新的消息' :`- 您有${userInfo.unreadNum}条未读消息` " @click="goSubPage('myMessage')"></cell>
-							<cell icon-path="../../../static/fk.png" title="问题反馈" desc="- 有问题就告诉我们" @click="goSubPage('feedBack')"></cell>
-							<cell icon-path="../../../static/sc.png" title="收藏广告" desc="- 收藏有用信息" @click="goSubPage('collectionAD')"></cell>
-							<cell icon-path="../../../static/sz.png" title="偏好设置" desc="- 官网、小程序、兴趣等" border-bottom-color="transparent" @click="goSubPage('setting')"></cell>
-							
-						</view>
+					<view class="withdrawal flex1" @click="goSubPage('withdrawal')">
+						<view class="tit">账户余额<text class="drawal">(去提现)</text></view>
+						<view class="num">{{userInfo.userSurplus}}</view>
 					</view>
-					<view class="spaceBox"></view>
+				</view>
+			</view>
+			
+			<view class="cells">
+				<cell icon-path="../../../static/xiaox.png" title="当前用户人数:" :desc="String(userInfo.countPeople)" desc-color="red" desc-size="20" right-text="立即发布" border-bottom-color="transparent" :is-icon-show="false" @click="goIssuePage"></cell>
+				
+				<view class="group1">
+					<cell icon-path="../../../static/fx1.png" title="分享应用" desc="- 提高会员等级" @click="goSubPage('share')"></cell>
+					<cell icon-path="../../../static/cj.png" title="好运抽奖" desc="- 最高奖励500元" @click="goSubPage('luckdraw')"></cell>
+					<cell icon-path="../../../static/ss.png" title="每日签到" desc="- 连续7日,最高奖励100元"  border-bottom-color="transparent" @click="signIn"></cell>
 				</view>
 				
-				
-		<!-- </ygc-refresh> -->
+				<view class="group2">
+					<cell icon-path="../../../static/tz.png" title="我的消息" :desc-color="userInfo.unreadNum > 0?'red': ''" :desc="userInfo.unreadNum == 0 ? '- 未有新的消息' :`- 您有${userInfo.unreadNum}条未读消息` " @click="goSubPage('myMessage')"></cell>
+					<cell icon-path="../../../static/fk.png" title="问题反馈" desc="- 有问题就告诉我们" @click="goSubPage('feedBack')"></cell>
+					<cell icon-path="../../../static/sc.png" title="收藏广告" desc="- 收藏有用信息" @click="goSubPage('collectionAD')"></cell>
+					<cell icon-path="../../../static/sz.png" title="偏好设置" desc="- 官网、小程序、兴趣等" border-bottom-color="transparent" @click="goSubPage('setting')"></cell>
+					
+				</view>
+			</view>
+			<view class="spaceBox"></view>
+		</view>
 	</view>
 </template>
 
 <script>
-	import ygcRefresh from '@/components/ygc-refresh/ygc-refresh.vue';
 	import cell from '@/components/cell/cell.vue'
 	export default {
 		data() {
@@ -143,7 +137,7 @@
 				})
 			}
 		},
-		comments:{cell,ygcRefresh}
+		comments:{cell}
 	}
 </script>
 

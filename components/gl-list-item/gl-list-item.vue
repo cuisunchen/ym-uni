@@ -73,7 +73,7 @@
 	padding: 20rpx;
 	.title{
 		font-size: 28rpx;
-		line-height: 28rpx;
+		line-height: 36rpx;
 		margin-bottom: 20rpx;
 	}
 	.con{
