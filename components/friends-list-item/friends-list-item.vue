@@ -32,6 +32,16 @@
 				colors:['#699E11','#358CBD','#E7932E','#4CAFA3','#8BD188','#FFBD00','#307469','#F299AA','#FF3B30','#4DA54F']
 			};
 		},
+		watch:{
+			dataObj(val){
+				// #ifdef APP-PLUS
+				this.item=JSON.parse(val)
+				// #endif
+				// #ifdef H5
+				this.item=val
+				// #endif
+			},
+		},
 		created() {
 			// #ifdef APP-PLUS
 			this.item=JSON.parse(this.dataObj)

@@ -16,7 +16,7 @@
 				<issue-upload-card class="uploadCard" title="问答" width-height-rate="1:1" @choose="chooseTitImg"></issue-upload-card>
 				<view class="conText flex align-center">
 					<view class="label">标题:</view>
-					<input class="flex1 input" type="text" v-model.trim="form.title" placeholder-class="holderClass" placeholder="请输入标题" />
+					<input class="flex1 input" type="text" maxlength="80" v-model.trim="form.title" placeholder-class="holderClass" placeholder="请输入标题" />
 				</view>
 			</view>
 			

@@ -15,7 +15,7 @@
 			<view class="uplaodTitImgBox box">
 				<view class="conText flex align-center">
 					<view class="label">标题:</view>
-					<input class="flex1 input" type="text" v-model="form.title" placeholder-class="holderClass" placeholder="请输入标题" />
+					<input class="flex1 input" type="text" maxlength="80" v-model="form.title" placeholder-class="holderClass" placeholder="请输入标题" />
 				</view>
 				<issue-upload-card class="uploadCard" type="row3" title="标题" 
 							width-height-rate="3:1" @choose="chooseTitImg"></issue-upload-card>

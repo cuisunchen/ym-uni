@@ -1,6 +1,6 @@
 <template>
 	<scroll-view scroll-y :refresher-enabled="true" :refresher-triggered="triggered" refresher-threshold
-				 @scrolltolower="infiniteScroll" class="nationwideList" 
+				 @scrolltolower="infiniteScroll" class="nationwideList"
 				@refresherrefresh="refresh">
 		<view class="recommendBox">
 			<recommend-list :is-title-show="false" :data-obj="recommendList" @click="goDetail"></recommend-list>
