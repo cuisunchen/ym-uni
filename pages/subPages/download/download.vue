@@ -72,7 +72,6 @@
 						 secret: '72a0c2867712bcae6089e3cf46482fa9' // 小程序秘钥
 					 },
 					 success:(res)=> {
-						 console.log(this.userInfo.agentCode)
 						uni.request({
 							 url: 'https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?access_token=' + res.data.access_token,
 							 method: 'POST',
@@ -104,12 +103,10 @@
 								/* 加载base64编码 */
 								bitmap.loadBase64Data(bitmap.toBase64Data(),
 									() => {
-										console.log('加载Base64图片数据成功');
 										let timeStamp = new Date().getTime()
 										/* 保存图片 */
 										bitmap.save('_doc/share' + timeStamp + '.jpg',{},
 											async (i)=>{
-												console.log('保存图片成功：' + JSON.stringify(i));
 												uni.saveImageToPhotosAlbum({
 													filePath: i.target,
 													success: ()=> {
