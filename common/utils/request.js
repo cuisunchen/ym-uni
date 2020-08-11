@@ -1,50 +1,51 @@
 import urlConfig from './config.js'
-
+import { getRsaCode } from './rsa'
 const headers = {}
 
-
-const request = (url, method='post', data, hasToken="true") => {
+const request = (url, method='post', data={}, hasToken="true") => {
 		let token = uni.getStorageSync('token')
 		if(hasToken){
-			headers['Authorization'] =  token ? 'Bearer ' + token : ''
+			headers['Authorization'] =  token ? 'Bearer ' + token : '',
+			headers['Content-Type']= 'application/json;charset=utf-8'
 		}else{
-			headers['Authorization'] = '' 
-		}
-    
+			headers['Authorization'] = '',
+			headers['Content-Type']= 'application/json;charset=utf-8'
+		} 
+    let param = Object.keys(data).length > 0 ? getRsaCode(JSON.stringify(data)) : data
 		let promise = new Promise((resolve, reject)=> {
 				return uni.request({
 						url: urlConfig + url,
 						method,
-						data: data,
+						data: Object.keys(data).length > 0 ? { params: param } : data,
 						dataType: 'json',
 						header: headers
 				}).then(res => {
 					uni.hideLoading()
-						if ((res[1].data.code && res[1].data.code == 200) || res[1].data.code == 999 
-								|| res[1].data.code == 500|| res[1].data.code == 555) {
-							resolve(res[1].data)
-						} else {
-							if(res[1].data.code == 502 || res[1].data.code == 501 || res[1].data.code == 503){
-								uni.showToast({
-									icon:'none',
-									title: res[1].data.msg,
-									duration: 2000 
-								}); 
-								// uni.clearStorage()
-								uni.removeStorageSync('token');
-								uni.removeStorageSync('userInfo');
-								uni.reLaunch({
-									url: '/pages/subPages/login/login'
-								});
-								return false
-							}else{
-								uni.showToast({
-									icon:'none',
-									title: res[1].data.msg,
-									duration: 2000 
-								});
-							}
+					if ((res[1].data.code && res[1].data.code == 200) || res[1].data.code == 999 
+							|| res[1].data.code == 500|| res[1].data.code == 555) {
+						resolve(res[1].data)
+					} else {
+						if(res[1].data.code == 502 || res[1].data.code == 501 || res[1].data.code == 503){
+							uni.showToast({
+								icon:'none',
+								title: res[1].data.msg,
+								duration: 2000 
+							}); 
+							// uni.clearStorage()
+							uni.removeStorageSync('token');
+							uni.removeStorageSync('userInfo');
+							uni.reLaunch({
+								url: '/pages/subPages/login/login'
+							});
+							return false
+						}else{
+							uni.showToast({
+								icon:'none',
+								title: res[1].data.msg,
+								duration: 2000 
+							});
 						}
+					}
 				}).catch(parmas => {
 					console.log('错误')
 					uni.showToast({

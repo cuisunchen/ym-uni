@@ -1,0 +1,321 @@
+<template>
+	<div class="wrap flex1 flex-column">
+		<scroll-view scroll-y="true" class="taskDetail flex1">
+			<div class="circleBg"></div>
+			
+			<div  class="content">
+				<div class="rule all-center"><text class="ruleTxt">任务规则,做前必看</text></div>
+				<div class="taskInfo row">
+					<div class="imgBox"></div>
+					<div class="info flex1 flex-between">
+						<text class="infoTitle">关注领16.88红包关注领16.88红包关注领16.88红包关注领16.88红包</text>
+						<div class="nums">
+							<div class="row align-center">
+								<text class="surplusTxt font24 color6">剩余数量:</text><text class="surplusNum font24 color6">274</text>
+								<text class="line color6">|</text>
+								<text class="hour font24 color6">4</text><text class="txt font24 color6">小时内审核</text>
+							</div>
+						</div>
+						<div class="tags">
+							<my-tag text="简单关注" color="#D4BA88"></my-tag>
+						</div>
+					</div>
+					<div class="profit row justifu-center"><text class="profitNum">+0.12</text><text class="unit">元</text></div>
+				</div>
+				
+				<div class="requirement">
+					<div class="requireTit"><text class="requireTitTxt">任务要求</text></div>
+					<div class="requireCon flex-wrap">
+						<text class="requireConTxt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;仅限首次关注仅限首次关注仅限首次关注仅限首次关注仅限首次关注仅限首次关注</text>
+					</div>
+				</div>
+				
+				<div class="stepWrap">
+					<div class="requireTit"><text class="requireTitTxt">任务步骤</text></div>
+					<div class="stepBox">
+						<div class="stepTitBox row align-center">
+							<text class="stepIndex">1.</text>
+							<text class="stepTit">支付宝扫码关注领取16.88红包</text>
+						</div>
+						
+						<div class="pathBox">
+							<text class="oneTxt">www.baidu.com</text>
+							<div class="btns row flex-between" v-if="false">
+								<button class="btn1 radiuBtn flex1"><text class="btntxt">打开链接</text></button>
+								<button class="btn2 radiuBtn flex1"><text class="btntxt">复制到浏览器</text></button>
+							</div>
+							<div class="btns row all-center">
+								<button class="btn1 radiuBtn copyBtn flex all-center"><text class="btntxt">复制口令</text></button>
+							</div>
+						</div>
+						
+						<div class="codeImgBox" v-if="false">
+							<image class="img" :style="{height:oneImgHeight+'px'}" src="@/static/place/fengPlace@2x.png" @load="oneImgLoad" resize="contain"></image>
+						</div>
+					</div>
+					
+					<div class="stepBox">
+						<div class="stepTitBox flex-wrap">
+							<text class="stepIndex">2.</text>
+							<text class="stepTit">显示投票成功截图101368不是的不要提交,不显示投票成功不要提交谢谢,一个手机号这能投票一次</text>
+						</div>
+						<image class="img" :style="{height:oneImgHeight+'px'}" src="@/static/place/fengPlace@2x.png" @load="oneImgLoad" resize="contain"></image>
+					</div>
+				</div>
+				
+				<div class="voucherBox">
+					<div class="requireTit"><text class="requireTitTxt">上传截图凭证</text></div>
+					<div class="voucherCon">
+						<text class="voucherTit">这是截图标题这是截图标题这是截图标题这是截图标题</text>
+						
+						<div class="uploadBox row">
+							<div class="imgExample flex1 row">
+								<image class="img exampleImg flex1" src="@/static/place/fengPlace@2x.png" resize="cover"></image>
+								<text class="exampleTxt all-center">示例验证图</text>
+							</div>
+							<div class="addImgWrap flex1 all-center">
+								<div class="addImg"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</scroll-view>
+		<div class="apply">
+			<button class="applyBtn flex1" type="default"><text class="applyTxt">申请</text></button>
+		</div>
+	</div>
+</template>
+
+<script>
+	import myTag from '../../../components/my-tag/my-tag.vue'
+	export default {
+		components:{
+			myTag
+		},
+		data() {
+			return {
+				oneImgHeight: 300
+			}
+		},
+		methods: {
+			oneImgLoad(e){
+				this.oneImgHeight = 150/ (e.detail.width/e.detail.height)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+.apply{
+	height: 100rpx;
+	background-color: #fff;
+}
+.taskDetail{
+	overflow: hidden
+}
+.circleBg{
+	width: 1600upx;
+	height: 1600upx;
+	border-radius: 800upx;
+	background-color: #2C405A;
+	margin-top: -1380upx;
+	margin-left: -425upx;	
+}
+.content{
+	margin-top: -220upx;
+	padding: 0 30rpx;
+}
+.ruleTxt{
+	font-size: 24rpx;
+	color: #fff;
+	line-height: 40rpx;
+	border-bottom-width: 1rpx;
+	border-style: solid;
+	border-color: #fff;
+}
+.taskInfo{
+	margin-top: 20rpx;
+	padding: 30rpx 20rpx;
+	border-radius: 10rpx;
+	background-color: #fff;
+}
+.imgBox{
+	width: 110rpx;
+	height: 110rpx;
+	border-radius: 15rpx;
+	background-color: #007AFF;
+}
+.info{
+	margin-left: 20rpx;
+}
+.profit{
+	width: 130rpx;
+	font-size: 32rpx;
+}
+.profitNum{
+	color: #2C405A;
+	font-weight: 500;
+}
+.unit{
+	color: #2C405A;
+	font-size: 34rpx;
+	line-height: 44rpx;
+}
+.infoTitle{
+	font-size: 32rpx;
+	line-height: 28rpx;
+	margin: 6rpx 0 0;
+	lines:1;
+	text-overflow:ellipsis;
+}
+.line{
+	font-size: 26rpx;
+	margin: 0 6rpx;
+}
+.surplusTxt{
+	font-size: 26rpx;
+}
+.requirement{
+	border-radius: 10rpx;
+	background-color: #fff;
+	margin-top: 20rpx;
+	padding: 40rpx 20rpx 20rpx 0;
+}
+.requireTit{
+	height: 34rpx;
+	padding: 0 24rpx;
+	border-left-width: 8rpx;
+	border-color: #2C405A;
+	border-style: solid;
+}
+.requireTitTxt{
+	font-size: 30rpx;
+	font-weight: bold;
+}
+.requireCon{
+	padding-left: 48rpx;
+	margin-top: 14rpx;
+}
+.requireConTxt{
+	font-size: 28rpx;
+	color: #333;
+	line-height: 40rpx;
+}
+.stepWrap{
+	margin-top: 20rpx;
+	border-radius: 10rpx;
+	padding: 30rpx 0;
+	background-color: #fff;
+}
+.stepBox{
+	padding: 0 30rpx;
+	margin-top: 20rpx;
+	margin-bottom: 20rpx;
+}
+.stepTitBox{
+	position: relative;
+}
+.stepIndex{
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: #2C405A;
+	font-size: 36rpx;
+	line-height: 40rpx;
+	font-weight: bold;
+	margin-right: 10rpx;
+}
+.stepTit{
+	font-size: 28rpx;
+	padding-left: 40rpx;
+	line-height: 36rpx;
+}
+
+.img{
+	width: 150px;
+	margin-top: 16rpx;
+}
+.oneTxt{
+	font-size: 26rpx;
+	padding: 20rpx;
+	border-radius: 4rpx;
+	background-color: #eee;
+	margin: 20rpx 0 26rpx;
+}
+.btn1{
+	margin-right: 36rpx;
+}
+.radiuBtn{
+	font-size: 30rpx;
+	height: 60rpx;
+	border-width: 1rpx;
+	border-color: #2C405A;
+	border-style: solid;
+	border-radius: 30rpx;
+}
+.copyBtn{
+	padding: 0 40rpx;
+}
+.btntxt{
+	color: #2C405A;
+	font-size: 28rpx;
+	height: 26rpx;
+}
+.voucherBox{
+	border-radius: 10rpx;
+	margin-top: 20rpx;
+	margin-bottom: 20rpx;
+	padding: 40rpx 0;
+	background-color: #FFFFFF;
+}
+.voucherCon{
+	padding: 30rpx 30rpx 0;
+}
+.voucherTit{
+	font-size: 28rpx;
+	line-height: 36rpx;
+	margin-bottom: 20rpx;
+}
+.uploadBox{
+	height: 500rpx;
+	background-color: #eee;
+}
+.imgExample{
+	width: 150px;
+	position: relative;
+	background-color: #007AFF;
+}
+.exampleTxt{
+	position: absolute;
+	top: 0;
+	font-size: 28rpx;
+	line-height: 26rpx;
+	color: #fff;
+	z-index: 999;
+	padding: 4rpx 6rpx;
+	background-color: #2C405A;
+}
+.exampleImg{
+	margin-top: 0;
+}
+.addImg{
+	width: 170rpx;
+	height: 170rpx;
+	border-width: 1rpx;
+	border-color: #2C405A;
+	border-style: solid;
+	border-radius: 10rpx;
+	background-color: #007AFF;
+}
+.apply{
+	padding: 10rpx 30rpx;
+}
+.applyBtn{
+	background-color: #2C405A;
+}
+.applyTxt{
+	color: #fff;
+	font-size: 28rpx;
+}
+</style>

@@ -16,7 +16,7 @@
 	</view>
 </template>
 <script>
-	import cell from '@/components/cell/cell.vue'
+	import cell from '@/components/myCell/myCell.vue'
 	import { mapGetters } from 'vuex'
 	export default {
 		comments:{cell},

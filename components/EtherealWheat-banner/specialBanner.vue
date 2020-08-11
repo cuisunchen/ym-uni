@@ -101,10 +101,11 @@ export default {
 	},
 	methods: {
     swiperChange (e) {
-      this.curIndex = e.mp.detail.current
+			console.log(e)
+      this.curIndex = e.detail.current
       this.isDescAnimating = true
       let timer = setTimeout( () => {
-        this.descIndex = e.mp.detail.current
+        this.descIndex = e.detail.current
         clearTimeout(timer)
       }, 150)
     },
@@ -131,9 +132,13 @@ export default {
 		box-sizing: border-box;
 		width: 100%;
 		height: 100%;
+		/* #ifndef APP-NVUE */
 		display: flex;
+		/* #endif */
 		&.onlyOne{
+			/* #ifndef APP-NVUE */
 			display: flex;
+			/* #endif */
 			align-items: center;
 			justify-content: center;
 		}

@@ -1,0 +1,67 @@
+<template>
+	<refresh class="refresh all-center" @refresh="onrefresh" @pullingdown="onpullingdown" :display="refreshing ? 'show' : 'hide'">
+		<loading-indicator class="loading-icon" animating="true" v-if="refreshStat == 2"></loading-indicator>
+		<uni-icons v-if="refreshStat == 0 || refreshStat == 1" class="icon" type="arrowthindown" :class="{changeTop: refreshStat == 1}"></uni-icons>
+		<text class="refresh-div-text">{{ refreshText[refreshStat] }}</text>
+	</refresh>
+</template>
+
+<script>
+	export default {
+		props:{
+			refreshStatus:{
+				type: Number,
+				default: 0
+			}
+		},
+		data(){
+			return{
+				refreshing: false,
+				refreshStat: 0,
+				refreshText: ['下拉刷新', '释放更新', '刷新中...', '刷新成功'],
+			}
+		},
+		watch:{
+			refreshStatus(val){
+				this.refreshStat = val
+				this.refreshing = val == 2
+			}
+		},
+		methods:{
+			onrefresh(){
+				this.$emit('refresh')
+			},
+			onpullingdown(event){
+				this.$emit('pullingdown',event)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+.refresh{
+	width: 750upx;
+	flex-direction: row;
+}
+.icon{
+	transition-duration: .3s;
+	transition-property: transform;
+	transform: rotate(0deg);
+}
+.loading-icon {
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+	color: #999999;
+}
+.changeTop{
+	transform: rotate(-180deg);
+}
+.refresh-div-text {
+	font-size: 14px;
+	color: #999999;
+	line-height: 60px;
+	text-align: center;
+	margin-left: 10rpx;
+}
+</style>

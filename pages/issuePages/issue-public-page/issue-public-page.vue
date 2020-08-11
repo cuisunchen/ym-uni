@@ -150,7 +150,6 @@
 			},
 			submitRequest(){
 				this.$request('/api/release','post',this.form).then(res => {
-					// console.log(res)
 					if(res.code == 200){
 						if(uni.getSystemInfoSync().platform == 'android'){
 							uni.showModal({
@@ -181,6 +180,8 @@
 								}
 							}
 						})
+					}else{
+						this.showToast(res.msg)
 					}
 				})
 			},

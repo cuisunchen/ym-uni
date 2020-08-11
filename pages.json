@@ -1,6 +1,32 @@
 {
 	"pages": [
 		{
+			"path" : "pages/tabBar/newHome/newHome",
+			"style" : {
+				"navigationBarTitleText": "首页",
+				// "enablePullDownRefresh": true,
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"backgroundColor": "#2C405A"
+					}
+				}
+			}
+		},
+		{
+		    "path" : "pages/subPages/totalTaskPage/totalTaskPage",
+		    "style" : {
+					"navigationBarTitleText": "任务",
+					// "enablePullDownRefresh": true,
+					"app-plus": {
+						"bounce": "none",
+						"titleNView": {
+							"backgroundColor": "#2C405A"
+						}
+					}
+				}
+		},
+		{
 		    "path" : "pages/subPages/coverPage/coverPage",
 		    "style" : {
 					"app-plus": {
@@ -610,7 +636,119 @@
 							}
 						}
 				}
-        
+        ,{
+            "path" : "pages/subPages/taskDetail/taskDetail",
+            "style" : {
+							"navigationBarTitleText": "任务详情",
+							"app-plus": {
+								"bounce": "none",
+								"titleNView": {
+									"backgroundColor": "#2C405A"
+								}
+							}
+						}
+        }
+        ,{
+            "path" : "pages/issuePages/issueTask/issueTask",
+            "style" : {
+            	"navigationBarTitleText": "发布任务",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskType/taskType",
+            "style" : {
+            	"navigationBarTitleText": "任务类型",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A",
+									"buttons": [{
+										"text": "确定",
+										"fontSize": "14",
+										"width": "70px"
+									}]
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskName/taskName",
+            "style" : {
+							"navigationBarTitleText": "任务名称",
+							"app-plus": {
+								"bounce": "none",
+								"titleNView": {
+									"backgroundColor": "#2C405A"
+								}
+							}
+						}
+        }
+        ,{
+            "path" : "pages/subPages/taskRequirement/taskRequirement",
+            "style" : {
+            	"navigationBarTitleText": "任务要求",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskUpload/taskUpload",
+            "style" : {
+            	"navigationBarTitleText": "设置任务打开方式",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskStep/taskStep",
+            "style" : {
+            	"navigationBarTitleText": "任务步骤",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskVoucher/taskVoucher",
+            "style" : {
+            	"navigationBarTitleText": "用户截图凭证",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/subPages/taskCollectInfo/taskCollectInfo",
+            "style" : {
+            	"navigationBarTitleText": "用户信息",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"backgroundColor": "#2C405A"
+            		}
+            	}
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -626,7 +764,7 @@
 		"list": [
 			
 			{
-				"pagePath": "pages/tabBar/home/home",
+				"pagePath": "pages/tabBar/newHome/newHome",
 				"iconPath": "static/home@2x.png",
 				"selectedIconPath": "static/home_fill@2x.png",
 				"text": "首页"

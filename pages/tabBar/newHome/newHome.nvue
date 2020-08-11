@@ -1,0 +1,162 @@
+<template>
+	<list class="newHomePage flex-column flex1" @loadmore="loadMore" loadmoreoffset="10">
+		<my-refresh :refreshStatus="refreshStatus" @refresh="onrefresh" @pullingdown="onpullingdown"></my-refresh>
+		<cell>
+			<my-swiper class="mySwiper"  :banner-list="bannerList"></my-swiper>
+		</cell> 
+		<cell>
+			<bar class="bar" @click="barClick"></bar>
+		</cell>
+		<header class="titleBox">
+			<div class="listBoxTitle  row align-center">
+				<text class="tit">为你推荐</text>
+				<text class="level">LV2</text>
+				<text class="desc"> - 提交任务即可获利</text>
+			</div>
+		</header>
+		<cell class="listBox" v-for="item in list" @click="goTaskDetail">
+			<taskCard class="taskCard"></taskCard>
+		</cell>
+	</list>
+</template>	
+
+<script>
+	import {request} from '@/common/utils/request.js'
+	import bar from './bar.nvue'
+	import mySwiper from './mySwiper.vue'
+	import taskCard from '@/components/task-card/task-card.vue'
+	import myRefresh from '@/components/my-refresh/my-refresh.nvue'
+	
+	import { getRsaCode } from '@/common/utils/rsa.js'
+	const loadMore_count = 4
+	export default {
+		components:{bar,mySwiper,taskCard,myRefresh},
+		data() {
+			return {
+				bannerList:[],
+				refreshStatus: 0,
+				refreshText: ['下拉刷新', '释放更新', '刷新中...', '刷新成功'],
+				list:[1,2,3,4,5,6,7,8,9,10]
+			}
+		},
+		created(){
+			let that = this
+			let userInfo = uni.getStorageSync('userInfo')
+			if(!userInfo){return}
+			this.getRecommendData()  
+		},
+		methods: {
+			async getRecommendData(){
+				let dataObj = await this.getAllClass();
+				this.bannerList = dataObj.data.carousel
+			},
+			getAllClass: (data={}) => {
+				return new Promise((resolve, reject) => {
+					let token = uni.getStorageSync('token')
+					const headers = {}
+					headers['Authorization'] =  token ? 'Bearer ' + token : '',
+					headers['Content-Type']= 'application/json;charset=utf-8' 
+					let param = Object.keys(data).length > 0 ? getRsaCode(JSON.stringify(data)) : data
+						uni.request({
+							url: 'https://test.guangyi009.com/api/view/homeAdImg',
+							method: 'GET',
+							data: Object.keys(data).length > 0 ? { params: param } : data,
+							dataType: 'json',
+							header: headers,
+							success: (res) => {
+									resolve(res.data);
+							},
+							fail: (err) => {
+									reject('err')
+							}
+						});
+				})
+			},
+			goTaskDetail(){ 
+				uni.navigateTo({
+					url:'../../subPages/taskDetail/taskDetail' 
+				})
+			},
+			loadMore(){
+				console.log('loadMore')
+				setTimeout(()=>{
+					const length = this.list.length
+					for (let i = length; i < length+4; ++i) {
+						this.list.push(i+1)
+					}
+				},800)
+			},
+			barClick(data){
+				uni.navigateTo({
+					url:'../../subPages/totalTaskPage/totalTaskPage'
+				})
+			},
+			
+			goDetail(data){
+				if(!data.homeBigImgUrl && !data.bigImg && !data.contentImg){return}
+				uni.showLoading({
+					title: '将前往详情页面',
+					duration: 2000,
+					mask: true
+				})
+				data.bigImg = data.homeBigImgUrl || data.jumpUrl || data.contentImg
+				var strRegex = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+				let re=new RegExp(strRegex);
+				if (!re.test(data.bigImg)) {
+					// this.showToast('详情页地址有误,请联系客服')
+					return
+				}
+				uni.navigateTo({
+					url: "../../subPages/details/details?param=" + encodeURIComponent(JSON.stringify(data))
+				})
+			},
+			onrefresh(){
+				this.refreshStatus = 2;
+				setTimeout(()=>{
+					this.refreshStatus = 3;
+				},2000)
+			},
+			onpullingdown(event){
+				var refreshHeight = event.viewHeight;
+				var pullingDistance = event.pullingDistance;
+				this.refreshStatus = refreshHeight < pullingDistance ? 1 : 0;
+			}
+		}
+	}
+</script>
+
+<style>	
+.mySwiper{
+	padding: 20rpx 0;
+}
+.bar{
+	margin-bottom: 10rpx;
+}
+.titleBox{
+	height: 80rpx;
+}
+.listBoxTitle{
+	height: 80rpx;
+	padding-left: 25rpx;
+	padding-right: 25rpx;
+	background-color: #f6f6f6;
+}
+.tit{
+	font-size: 30rpx;
+}
+.level{
+	color: red;
+	font-size: 36rpx;
+	margin: 0 10rpx 6rpx;
+}
+.desc{
+	color: #999;
+	font-size: 24rpx;
+}
+.listBox{
+	padding: 0 25rpx;
+}
+.taskCard{
+	margin-bottom: 20rpx;
+}
+</style>

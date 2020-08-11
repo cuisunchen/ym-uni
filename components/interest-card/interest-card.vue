@@ -14,10 +14,8 @@
 </template>
 
 <script>
-	import uniIcons from "@/components/uni-icons/uni-icons.vue" 
 	import { mapGetters, mapMutations } from 'vuex'
 	export default {
-		components:{uniIcons},
 		props:{
 			dataObj:{
 				// #ifdef APP-PLUS

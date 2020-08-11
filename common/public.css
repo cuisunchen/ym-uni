@@ -2,21 +2,22 @@ page{
 	/* #ifndef APP-NVUE */
 		height: 100%;
 		font-size: 26rpx;
-		background-color: #f6f6f6;
+		background-color: #eee;
 	/* #endif */
 }
-
 .flex{
 	/* #ifndef APP-NVUE */
 		display: flex;
 	/* #endif */
-	
 }
 .flex-column{
 	/* #ifndef APP-NVUE */
 		display: flex;
 	/* #endif */
 	flex-direction: column;
+}
+.row{
+	flex-direction: row;
 }
 .flex1{
 	flex: 1;
@@ -44,9 +45,13 @@ page{
 	/* #ifndef APP-NVUE */
 	flex-shrink: 0;
 	/* #endif */
-	
 }
-
+.flex-wrap{
+	/* #ifndef APP-NVUE */
+		display: flex;
+		flex-flow:row wrap;
+	/* #endif */
+}
 
 .holderClass{
 	color: #999;
@@ -83,3 +88,10 @@ button{
 	font-size: 28rpx;
 }
 /* #endif */
+
+.font24{
+	font-size: 24rpx;
+}
+.color6{
+	color: #666;
+}

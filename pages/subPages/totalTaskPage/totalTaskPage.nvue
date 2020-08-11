@@ -1,0 +1,184 @@
+<template>
+	<div class="content">
+		<div class="scrollBox">
+			<scroll-view ref="scrollerHead" id="tab-bar" class="tab-cell tab-bar" scroll-x="true" :show-scrollbar="false"
+							 :scroll-into-view="scrollInto">
+				 <div class="head-tabs">
+						 <div class="tab" v-for="(tab, t) in tabList" :id="tab.id" :key="t" :ref="'tabitem' + t" @click="ontabtap(t)">
+								<text class="tab-title" :id="'tabitemChild' + t" :ref="'tabitemChild' + t">{{tab.text}}</text>
+						 </div>
+						 <div class="divider-select" v-bind:style="dividerStyle">
+								<div class="select-line" ></div>
+						 </div>
+				 </div>
+			</scroll-view>
+		</div>
+			
+		<div class="listWrap flex1">
+			<swiper class="tab-view flex1" id="tab-bar-view" :current="tabIndex" :duration="300" 
+				@change="onswiperchange">
+				<swiper-item class="swiper-item" v-for="(page, index) in tabList" :key="index">
+					<list :id="pageId" class="totalTaskPage" @loadmore="loadMore" loadmoreoffset="10">
+						<my-refresh :refreshStatus="refreshStatus" @refresh="onrefresh" @pullingdown="onpullingdown"></my-refresh>
+						
+						<cell class="listBox" v-for="item in 'dataList' + page.id" @click="goTaskDetail">
+							<taskCard class="taskCard"></taskCard>
+						</cell>
+					</list>
+				</swiper-item>
+			</swiper>
+		</div>
+			
+	</div>
+	 
+</template>
+
+<script>
+	import myRefresh from '@/components/my-refresh/my-refresh.nvue'
+	import taskCard from '@/components/task-card/task-card.vue'
+	// #ifdef APP-PLUS
+	const dom = weex.requireModule('dom');
+	// #endif
+	const loadMore_count = 4
+	export default {
+		components:{
+			myRefresh,taskCard
+		},
+		data(){
+			return{
+				refreshing: false,
+				refreshStatus: 0,
+				refreshText: ['下拉刷新', '释放更新', '刷新中...', '刷新成功'],
+				
+				list:[1,2,3,4,5,6,7,8,9,10],
+				tabList:[
+					{id:'tab1',text:'注册'},{id:'tab2',text:'下载下载'},{id:'tab3',text:'关注'},{id:'tab4',text:'购买'},{id:'tab5',text:'砍价'},
+					{id:'tab6',text:'砍价'},{id:'tab7',text:'砍价'},{id:'tab7',text:'砍价'},{id:'tab8',text:'砍价'},
+				],
+				dataList1:[1,2,3,4,5,6,7],
+				tabIndex: 0,
+				dividerStyle:{
+					transform : "",
+				},
+				lineWidth: '',
+			}
+		},
+		watch: {
+			refreshStatus(newValue) { 
+				this.refreshing = newValue == 2
+			}
+		},
+		onLoad() {
+			this.tabList.map((item)=>{
+				this['dataList'+ item.id] = [1,2,3,4,5,6,7,8,9]
+			})
+		},
+		methods:{
+			goTaskDetail(){
+				uni.navigateTo({
+					url:'../taskDetail/taskDetail/taskDetail'
+				})
+			},
+			ontabtap(i){
+				this.tabIndex = i
+				this['dataList'+ this.tabList[i].id] = [1,2,3,4,5,6,7,8,9]
+			},
+			onswiperchange(e){
+				this.tabIndex = e.detail.current
+				this.updateDivider();
+				// #ifdef APP-NVUE
+				this.scrollTabTo(this.tabIndex);
+				// #endif
+			},
+			scrollTabTo(index) {
+			  const el = this.$refs['tabitem' + index][0];
+				let query = uni.createSelectorQuery().in(this);
+				query.select('#' + this.tabList[index].id).boundingClientRect(); 
+				query.exec(data => {  
+						this.parentWidth = data[0].width
+				});
+				query.select('#tabitemChild' + index).boundingClientRect(); 
+				query.exec(data => {   
+						this.lineWidth = data[1].width
+				});
+				
+			  dom.scrollToElement(el, {
+					offset: index > 0 ? -62.5 : 0
+				});
+			},
+			updateDivider(){
+				var translateX = this.tabIndex * 62.5;
+				this.dividerStyle.transform = "translateX(" + translateX +"px)";
+		  },
+			loadMore(){
+				console.log('loadMore')
+				setTimeout(()=>{
+					const length = this.list.length
+					for (let i = length; i < length+4; ++i) {
+						this.list.push(i+1)
+					}
+				},800)
+			},
+			onrefresh(){
+				this.refreshStatus = 2;
+				setTimeout(()=>{
+					this.refreshStatus = 3;
+				},2000)
+			},
+			onpullingdown(event){
+				var refreshHeight = event.viewHeight;
+				var pullingDistance = event.pullingDistance;
+				this.refreshStatus = refreshHeight < pullingDistance ? 1 : 0;
+			}
+		}
+	}
+</script>
+
+<style scoped>
+.tab-cell {
+	flex-direction: row;
+	background-color: #fff;
+	height: 100rpx;
+}
+.content{
+	flex: 1;
+}
+.totalTaskPage{
+	flex: 1;
+}
+.head-tabs{
+	flex-direction: row;
+	position:relative;
+}
+
+.tab {
+	height: 100rpx;
+	width: 62.5px;
+	justify-content: center;
+	align-items: center;
+}
+.tab-title {
+	font-size: 28rpx;
+	color: #333;
+	margin-top: 10rpx;
+}
+.divider-select{
+		width: 62.5px;
+		position:absolute;
+		left:0px;
+		bottom:0px;
+		transition-property:transform;
+		transition-duration: 0.3s;
+}
+.select-line{
+		height:4rpx;
+		background-color: #333;
+}
+.listWrap{
+	padding: 20rpx;
+	
+}
+.taskCard{
+	margin-bottom: 20rpx;
+}
+</style>

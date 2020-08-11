@@ -28,19 +28,19 @@
 			</view>
 			
 			<view class="cells">
-				<cell icon-path="../../../static/xiaox.png" title="当前用户人数:" :desc="String(userInfo.countPeople)" desc-color="red" desc-size="20" right-text="立即发布" border-bottom-color="transparent" :is-icon-show="false" @click="goIssuePage"></cell>
+				<my-cell icon-path="../../../static/xiaox.png" title="当前用户人数:" :desc="String(userInfo.countPeople)" desc-color="red" desc-size="20" right-text="立即发布" border-bottom-color="transparent" :is-icon-show="false" @click="goIssuePage"></my-cell>
 				
 				<view class="group1">
-					<cell icon-path="../../../static/fx1.png" title="分享应用" desc="- 提高会员等级" @click="goSubPage('share')"></cell>
-					<cell icon-path="../../../static/cj.png" title="好运抽奖" desc="- 最高奖励500元" @click="goSubPage('luckdraw')"></cell>
-					<cell icon-path="../../../static/ss.png" title="每日签到" desc="- 连续7日,最高奖励100元"  border-bottom-color="transparent" @click="signIn"></cell>
+					<my-cell icon-path="../../../static/fx1.png" title="分享应用" desc="- 提高会员等级" @click="goSubPage('share')"></my-cell>
+					<my-cell icon-path="../../../static/cj.png" title="好运抽奖" desc="- 最高奖励500元" @click="goSubPage('luckdraw')"></my-cell>
+					<my-cell icon-path="../../../static/ss.png" title="每日签到" desc="- 连续7日,最高奖励100元"  border-bottom-color="transparent" @click="signIn"></my-cell>
 				</view>
 				
 				<view class="group2">
-					<cell icon-path="../../../static/tz.png" title="我的消息" :desc-color="userInfo.unreadNum > 0?'red': ''" :desc="userInfo.unreadNum == 0 ? '- 未有新的消息' :`- 您有${userInfo.unreadNum}条未读消息` " @click="goSubPage('myMessage')"></cell>
-					<cell icon-path="../../../static/fk.png" title="问题反馈" desc="- 有问题就告诉我们" @click="goSubPage('feedBack')"></cell>
-					<cell icon-path="../../../static/sc.png" title="收藏广告" desc="- 收藏有用信息" @click="goSubPage('collectionAD')"></cell>
-					<cell icon-path="../../../static/sz.png" title="偏好设置" desc="- 官网、小程序、兴趣等" border-bottom-color="transparent" @click="goSubPage('setting')"></cell>
+					<my-cell icon-path="../../../static/tz.png" title="我的消息" :desc-color="userInfo.unreadNum > 0?'red': ''" :desc="userInfo.unreadNum == 0 ? '- 未有新的消息' :`- 您有${userInfo.unreadNum}条未读消息` " @click="goSubPage('myMessage')"></my-cell>
+					<my-cell icon-path="../../../static/fk.png" title="问题反馈" desc="- 有问题就告诉我们" @click="goSubPage('feedBack')"></my-cell>
+					<my-cell icon-path="../../../static/sc.png" title="收藏广告" desc="- 收藏有用信息" @click="goSubPage('collectionAD')"></my-cell>
+					<my-cell icon-path="../../../static/sz.png" title="偏好设置" desc="- 官网、小程序、兴趣等" border-bottom-color="transparent" @click="goSubPage('setting')"></my-cell>
 					
 				</view>
 			</view>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-	import cell from '@/components/cell/cell.vue'
+	import myCell from '@/components/myCell/myCell.vue'
 	export default {
 		data() {
 			return {
@@ -137,7 +137,7 @@
 				})
 			}
 		},
-		comments:{cell}
+		components:{myCell}
 	}
 </script>
 
