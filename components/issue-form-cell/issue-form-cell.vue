@@ -113,6 +113,7 @@
 <style lang="scss" scoped>
 .issueFormCell{
 	height: 80rpx;
+	line-height: 80rpx;
 	padding: 0 10rpx 0 30rpx;
 	border-radius: 10rpx;
 	.picker{

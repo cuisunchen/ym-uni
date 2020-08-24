@@ -1,6 +1,6 @@
 <template>
 	<view class="downloadPage page" id="_poster">
-		<view class="topTit flex all-center">您的好友邀请您加入 - 今日友米</view>
+		<!-- <view class="topTit flex all-center">您的好友邀请您加入 - 今日友米</view> -->
 		<view class="contentWrap" id="contentWrap">
 			<view class="userInfo flex">
 				<image class="img" src="../../../static/place/fang@2x.png" mode=""></image>
@@ -167,7 +167,7 @@
 		color: red;
 	}
 	.userInfo{
-		padding: 50rpx 30rpx 0 30rpx;
+		padding: 20rpx 30rpx 0 30rpx;
 		.img{
 			width: 120rpx;
 			height: 120rpx;

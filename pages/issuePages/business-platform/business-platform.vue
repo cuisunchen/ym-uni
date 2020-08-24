@@ -21,7 +21,7 @@
 						<view class="img">
 							<image src="../../../static/xiaox.png" mode=""></image>
 						</view>
-						<view class="notice flex1">
+						<view class="notice flex1 flex">
 							<uni-notice-bar v-if="info.broadcast" scrollable="true" color="#666" background-color="#eee" 
 													:speed="info.broadcast.length>50?70:100" :text="info.broadcast"></uni-notice-bar>
 						</view>
@@ -210,7 +210,7 @@
 				}
 				/deep/ .uni-noticebar{
 					font-size: 24rpx;
-					height: 100%;
+					// height: 100%;
 					padding: 0 8rpx;
 					margin-bottom: 0;
 				}

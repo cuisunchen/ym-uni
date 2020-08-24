@@ -41,7 +41,7 @@
 				<button type="default" class="flex1 flex all-center" @click="submit">确认提交-支付宝</button>
 			</view>
 			
-			<view class="xy flex all-center">商户协议,点击查看,确认提交默认遵守协议</view>
+			<view class="xy flex all-center" @click="goXY">商户协议,点击查看,确认提交默认遵守协议</view>
 		</view>
 		
 		<level-linkage ref="levelLinkage" 
@@ -80,7 +80,7 @@
 					"cityCode": "",
 					"releaseTimes": ['2020-07-16 00:00:00'],
 					"homeType": 0,
-					// "address": ''
+					// "address": '全国'
 				},
 				rangeType: 0,
 				pageType:'',
@@ -112,13 +112,12 @@
 		onLoad(opt) {
 			this.levelData = citysData
 			this.pageType = opt.type
-			
 			switch (opt.type){
 				case 'recommend-home':
 					uni.setNavigationBarTitle({
 					　　title:'发布首页-今日推荐'
 					})
-					this.form.cityCode = '0'
+					this.form.cityCode = 0
 					this.form.homeType = 4
 					this.rangeType = 1
 					break;
@@ -126,7 +125,7 @@
 					uni.setNavigationBarTitle({
 					　　title:'发布好运-祝您好运推荐'
 					})
-					this.form.cityCode = '0'
+					this.form.cityCode = 0
 					this.form.homeType = 5
 					this.rangeType = 1
 					break;
@@ -191,10 +190,14 @@
 				if(!res){
 					return
 				}
+				uni.showLoading({
+					title:'加载中'
+				})
 				this.submitRequest()
 			},
-			submitRequest(){
-				this.$request('/api/recommend','post',this.form).then(res => {
+			submitRequest(){  
+				this.$request('/api/recommend','post',encodeURIComponent(JSON.stringify(this.form))).then(res => {
+					uni.hideLoading()
 					if(res.code == 200){
 						if(uni.getSystemInfoSync().platform == 'android'){
 							uni.showModal({
@@ -268,11 +271,11 @@
 										title:'很遗憾,订单支付失败!',
 										content:'如有疑问,请联系客服',
 										showCancel:false,
-										success: () => {
-											uni.navigateBack({
-												delta:1
-											})
-										}
+										// success: () => {
+										// 	uni.navigateBack({
+										// 		delta:1
+										// 	})
+										// }
 									})
 									console.log('fail:' + JSON.stringify(err));
 								}
@@ -360,12 +363,16 @@
 					"homeAdType": this.form.homeType,
 					"rangType": this.rangeType
 				}
-				console.log(param)
 				this.$request('/api/releasePrice','post',param).then(res=>{
 					if(res.code == 200){
 						this.totalPeople = res.data.peopleTotal
 						this.unitPrice = res.data.initialPrice
 					}
+				})
+			},
+			goXY(){
+				uni.navigateTo({
+					url:'../../subPages/xy-middle-page/xy-middle-page?url=' + encodeURIComponent('http://inc.guangyi009.com/platformXY.html')
 				})
 			},
 		}
@@ -457,6 +464,7 @@
 		.xy{
 			color: #51a3f0;
 			height: 40rpx;
+			line-height: 40rpx;
 			font-size: 22rpx;
 			border-radius: 20rpx;
 			background-color: #fff;

@@ -8,7 +8,7 @@
 		
 		<view class="listWrap" v-if="cityList.length > 0">
 			<gl-list-item v-for="(item,index) in cityList" :key="index" :data-obj="item" @click="glDetail(item,index)"></gl-list-item>
-			<uni-load-more v-if="pullupLoadingType == 'loading'" :status="pullupLoadingType"></uni-load-more>
+			<uni-load-more :status="pullupLoadingType"></uni-load-more>
 		</view>
 		<div class="nodata flex-column align-center" v-if="cityList.length == 0">
 				<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
@@ -147,21 +147,6 @@
 			},
 			infiniteScroll() {
 				if(this.cityList.length == 0){return}
-				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
-					uni.showModal({
-						title:'提示',
-						content:'等级不足,邀请好友提升等级,可展示更多广告,获取更多收益!',
-						confirmText:'去分享',
-						success: (res)=> {
-							if (res.confirm) {
-									uni.navigateTo({
-										url:'../../subPages/download/download'
-									})
-							}
-						}
-					})
-					return
-				}
 				if(this.pullupLoadingType == 'noMore'){return}
 				this.param.pagesNum ++
 				this.pullupLoadingType = 'loading'

@@ -17,7 +17,7 @@
 			</view>
 			<scroll-view class="listWrap" scroll-y>
 				<home-list-item v-for="(item,index) in questions" :key="item.id" :data-obj="item" @click="qsDetail(item,index)"></home-list-item>
-				<uni-load-more v-if="pullupLoadingType == 'loading'" :status="pullupLoadingType"></uni-load-more>
+				<uni-load-more :status="pullupLoadingType"></uni-load-more>
 			</scroll-view>
 			<div class="nodata flex-column align-center" v-if="questions.length == 0">
 				<image class="img" src="../../../static/noData.png" mode="scaleToFill"></image>
@@ -27,13 +27,18 @@
 		<!-- #ifdef APP-PLUS -->
 		<mUpdateAppTip @updateClose="updateClose" :update_title="update_title" :is_forced_update="is_forced_update" :update_des="update_des" :update_type="update_type" :update_url="update_url" :is_update_app="is_update_app"></mUpdateAppTip>
 		<!-- #endif -->
-		
-		<view class="dialoagAD" v-if="isAlertImgShow">
+		<uni-popup class="dialoagAD" ref="popup" type="center">
 			<view class="wrap flex-column all-center">
 				<image :src="dialogObj.titleImg" mode="aspectFit" @click="goDetail(dialogObj)"></image>
 				<uni-icons class="closeBtn" type="close" color="#fff" size="32" @click="closeAlertImg"></uni-icons>
 			</view>
-		</view>
+		</uni-popup>
+		<!-- <view class="dialoagAD" v-if="isAlertImgShow">
+			<view class="wrap flex-column all-center">
+				<image :src="dialogObj.titleImg" mode="aspectFit" @click="goDetail(dialogObj)"></image>
+				<uni-icons class="closeBtn" type="close" color="#fff" size="32" @click="closeAlertImg"></uni-icons>
+			</view>
+		</view> -->
 	</view>
 </template>
 
@@ -84,7 +89,7 @@
 			}
 		},
 		onShow() {
-			 // #ifdef APP-PLUS
+			 // #ifdef APP-PLUS 
 			plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
 				this.version = widgetInfo.version;
 				this.getCheckVersion()
@@ -108,7 +113,6 @@
 			this.getRecommendData()  
 		},
 		onPullDownRefresh() {
-			
 			this.refresh()
 		},
 		onReachBottom(){  //上拉触底函数
@@ -124,8 +128,11 @@
 					// 这里需要返回app下载链接
 					if(res.code == 200){
 						let downloadTxt = '';
-						this.update_des = []   
-						if(this.version == res.data.version ){return}
+						this.update_des = []  
+						if(this.version == res.data.version ){
+							this.getAlertData()
+							return
+						}
 						if(this.version != res.data.version && res.data.forceUpdate == 'false'){
 							this.update_type = 0
 							downloadTxt = `版本号${res.data.version}精彩不容错过, 请及时更新!`
@@ -139,9 +146,6 @@
 							uni.hideTabBar()
 							this.update_url = res.data.downloadLink
 							this.updateApp()
-							return
-						}else{
-							this.getAlertData()
 							return
 						}
 						// this.updateApp()
@@ -220,7 +224,8 @@
 				// #endif
 			},
 			closeAlertImg(){
-				this.isAlertImgShow = false
+				// this.isAlertImgShow = false
+				this.$refs.popup.close()
 			},
 			userClick(item,index){
 				let param = {homeAdId : item.id}
@@ -266,16 +271,19 @@
 							let storageDate = uni.getStorageSync('date')
 							let nowDate = new Date().getTime()
 							let spaceTime = Math.floor((nowDate-storageDate)/1000/60/60)
+							
 							if(storageDate){
 								if(spaceTime > 1 || spaceTime == 1){ // 每次弹出后更新缓存时间,清除缓存中弹框状态
-									this.isAlertImgShow = true;
+									// this.isAlertImgShow = true;
+									this.$refs.popup.open()
 									wx.setStorage({
 										key: 'date',
 										data: nowDate
 									})
 								}
 							}else{
-								this.isAlertImgShow = true;
+								// this.isAlertImgShow = true;
+								this.$refs.popup.open()
 								wx.setStorage({
 									key: 'date',
 									data: nowDate
@@ -340,31 +348,12 @@
 				this.questions=[]
 				this.param.pageSize = 10
 				this.param.pagesNum = 1
-				uni.showLoading({
-					title:'加载中'
-				})
 				this.pullupLoadingType == 'more'
 				this.getDatas('refresh')
 			},
 			infiniteScroll() {
 				if(this.questions.length == 0){return}
-				if(this.param.pagesNum < 5 && this.pullupLoadingType == 'noMore'){
-					uni.showModal({
-						title:'提示',
-						content:'等级不足,邀请好友提升等级,可展示更多广告,获取更多收益!',
-						confirmText:'去分享',
-						success: (res)=> {
-							if (res.confirm) {
-									uni.navigateTo({
-										url:'../../subPages/download/download'
-									})
-							}
-						}
-					})
-					return
-				}
 				if(this.pullupLoadingType == 'noMore'){return}
-				
 				this.param.pagesNum ++
 				this.pullupLoadingType = 'loading'
 				uni.showLoading({
@@ -435,20 +424,20 @@
 		}
 	}
 	.dialoagAD{
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 10;
+		// position: fixed;
+		// top: 0;
+		// bottom: 0;
+		// left: 0;
+		// right: 0;
+		// z-index: 10;
 		background-color: rgba(0,0,0, .5);
 		.wrap{
-			position: relative; 
-			left: 50%; 
-			top: 50%; 
-			width: 90%; 
-			height: auto; 
-			transform:translate(-50%,-50%);
+			// position: relative; 
+			// left: 50%; 
+			// top: 50%; 
+			// width: 90%; 
+			// height: auto; 
+			// transform:translate(-50%,-50%);
 			image{
 				width: 600rpx;
 				height: 600rpx;

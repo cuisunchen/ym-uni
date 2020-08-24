@@ -115,6 +115,8 @@
 			right: 20rpx;
 			bottom: 20rpx;
 			border-radius: 6rpx;
+			height: 30rpx;
+			line-height: 30rpx;
 			background-color: rgba(0,0,0,.6);
 			.topVal{
 				margin-left: 16rpx;

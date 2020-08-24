@@ -25,7 +25,7 @@
 			}
 		},
 		onLoad(opt) {
-			this.typeId = opt.typeId || 0
+			this.typeId = opt.typeId || 0 
 		},
 		methods: {
 			addReply(){
@@ -71,25 +71,27 @@
 		}
 	      
 		.textareaBox{
-			 padding: 10rpx;
-			 background-color: #fff;
-			 .textarea{
-					width: 100%;
-					background-color: #fff;
-			 }
-			 .textHolder{
-				 font-size: 24rpx;
-			 }
+			padding: 10rpx;
+			background-color: #fff;
+			.textarea{
+				color: #333;
+			  font-size: 28rpx;
+				width: 100%;
+				background-color: #fff;
+			}
+			.textHolder{
+			  font-size: 24rpx;
+			}
 		}   
 	}
 	.btns{
 		font-size: 32rpx;
 		margin: 40rpx 0 60rpx;
 		.submit{
-			 color: #fff;
-			 height: 80rpx;
-			 border-radius: 6rpx;
-			 background-color: #D4BA88;
+			color: #fff;
+			height: 80rpx;
+			border-radius: 6rpx;
+			background-color: #D4BA88;
 		}
 	}   
 }

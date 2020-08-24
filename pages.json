@@ -1,5 +1,6 @@
 {
 	"pages": [
+		
 		{
 		    "path" : "pages/subPages/coverPage/coverPage",
 		    "style" : {
@@ -294,18 +295,18 @@
 						}
 					}
 				}
-		}
-		,{
-				"path" : "pages/subPages/login/login",
-				"style" : {
-					"navigationBarTitleText": "登录",
-					"app-plus": {
-						"bounce": "vertical",
-						"titleNView": false
-					}
+		},
+		{
+			"path" : "pages/subPages/login/login",
+			"style" : {
+				"navigationBarTitleText": "登录",
+				"app-plus": {
+					"bounce": "vertical",
+					"titleNView": false
 				}
-		}
-        ,{
+			}
+		},
+        {
 					 "path" : "pages/subPages/details/details",
 					 "style" : {
 						"navigationBarTitleText": "详情",
@@ -315,7 +316,7 @@
 							"titleNView": false
 						}
 					}
-			 }
+			  }
         ,{
             "path" : "pages/subPages/interest/interest",
             "style" : {

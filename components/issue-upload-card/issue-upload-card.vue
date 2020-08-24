@@ -90,7 +90,7 @@
 		height: 150rpx;
 		border-radius: 6rpx;
 		overflow: hidden;
-		background-color: #d8d8d8;
+		background-color: #eee;
 		image{
 			width: 100%;
 			height: 100%;

@@ -173,8 +173,11 @@
 					    key: 'userInfo',
 					    data: JSON.stringify(res.data),
 					    success: () => {
+								// uni.reLaunch({
+								// 	url:'../coverPage/coverPage'
+								// })
 								uni.reLaunch({
-									url:'../coverPage/coverPage'
+									url:'../../tabBar/home/home'
 								})
 					    }
 					});

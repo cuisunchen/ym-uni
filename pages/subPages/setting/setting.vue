@@ -24,28 +24,20 @@
 			return {
 				version:"",
 				lists:[
-					// {
-					// 	 iconUrl: '../../../static/gw.png',
-					// 	 title: '官网',
-					// 	 color: '',
-					// 	 isIconShow: false,
-					// 	 copyText:'',
-					// 	 desc: '- http://www.guangyi009.com'
-					// },
 					{
 						 iconUrl: '../../../static/xcx.png',
 						 title: '小程序',
 						 color: 'red',
 						 isIconShow: false,
 						 copyText:'',
-						 desc: '- 小程序搜索米圈日记'
+						 desc: ''
 					},{
 						 iconUrl: '../../../static/gw1.png',
 						 title: '官方微信',
 						 color: '',
 						 isIconShow: false,
 						 copyText:'',
-						 desc: '- youmi'
+						 desc: ''
 					},{
 						 iconUrl: '../../../static/xq.png',
 						 title: '设置兴趣',
@@ -65,9 +57,12 @@
 		onLoad() {
 			// #ifdef APP-PLUS
 			plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
-				this.version = widgetInfo.version;
+				this.version = "- 当前版本号" + widgetInfo.version;
 			});
 			// #endif
+			uni.showLoading({
+				title:'加载中'
+			})
 			this.getInfo()
 		},
 		methods: {
@@ -88,14 +83,12 @@
 			},
 			getInfo(){
 				 this.$request('/api/view/appInfo','get',{}).then(res=>{
+					 uni.hideLoading()
 						if(res.code == 200){
-							 this.lists[0].desc = '- ' + res.data.guanWang
-							 this.lists[0].copyText = res.data.guanWang
-							 this.lists[1].desc = '- 小程序搜索' + res.data.xiaoChengXu
-							 this.lists[1].copyText = res.data.xiaoChengXu
-							 this.lists[2].desc = '- ' + res.data.guanWechat
-							 this.lists[2].copyText = res.data.guanWechat
-							 console.log(this.lists)
+							 this.lists[0].desc = '- 微信小程序搜索"' + res.data.xiaoChengXu + '"'
+							 this.lists[0].copyText = res.data.xiaoChengXu
+							 this.lists[1].desc = '- ' + res.data.guanWechat
+							 this.lists[1].copyText = res.data.guanWechat
 						}
 				 })
 			},

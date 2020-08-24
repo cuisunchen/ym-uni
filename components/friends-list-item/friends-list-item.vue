@@ -58,6 +58,7 @@
 	.lastNum{
 		width: 80rpx;
 		height: 80rpx;
+		line-height: 80rpx;
 		font-size: 36rpx;
 		color: #fff;
 		background-color: aqua;
@@ -67,6 +68,7 @@
 	.phoneNumBox{
 		font-size: 30rpx;
 		color: #333;
+		line-height: 80rpx;
 		padding: 0 18rpx;
 		.phoneNum{
 			 margin-right: 18rpx;
@@ -74,6 +76,7 @@
 		.level{
 			 color: #fff;
 			 font-size: 22rpx;
+			 line-height: 40rpx;
 			 border-radius: 6rpx;
 			 padding: 0 10rpx;
 			 background-color: rgb(241, 193, 131);

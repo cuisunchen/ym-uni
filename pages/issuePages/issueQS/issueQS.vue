@@ -153,7 +153,7 @@
 				this.pickerText = '全国'
 			},
 			submit(){
-				this.form.interest = this.checked_hobbys_id || 0
+				this.form.interest = 0
 				if(this.netUrl){
 					let url  = this.netUrl.split('?')[0]
 					var strRegex = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)"
@@ -179,7 +179,7 @@
 				this.submitRequest()
 			},
 			submitRequest(){
-				this.$request('/api/questions','post',this.form).then(res => {
+				this.$request('/api/questions','post',encodeURIComponent(JSON.stringify(this.form))).then(res => {
 					uni.hideLoading()
 					if(res.code == 200){
 						if(uni.getSystemInfoSync().platform == 'android'){
@@ -255,11 +255,11 @@
 						    		title:'很遗憾,订单支付失败!',
 						    		content:'如有疑问,请联系客服',
 						    		showCancel:false,
-						    		success: () => {
-						    			uni.navigateBack({
-						    				delta:1
-						    			})
-						    		}
+						    		// success: () => {
+						    		// 	uni.navigateBack({
+						    		// 		delta:1
+						    		// 	})
+						    		// }
 						    	})
 						    	console.log('fail:' + JSON.stringify(err));
 						    }
@@ -485,6 +485,7 @@
 		.xy{
 			color: #51a3f0;
 			height: 40rpx;
+			line-height: 40rpx;
 			font-size: 22rpx;
 			border-radius: 20rpx;
 			background-color: #fff;

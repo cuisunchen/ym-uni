@@ -71,7 +71,7 @@
 			
 			<view class="currentRate flex all-center" :class="{green: rate > 20}">
 				<uni-icons class="iconBox flex flex-end" :type="rate > 20 ? 'checkbox-filled' : 'clear'" size="22" :color="rate > 20 ? 'green': 'red'" ></uni-icons>
-				<text class="rate">当前中奖率{{ rate || 0}}%</text>
+				<text class="rate flex all-center">当前中奖率{{ rate || 0}}%</text>
 			</view>
 			
 			<view class="tip">
@@ -166,7 +166,6 @@
 			}
 		},
 		onUnload() {
-			
 			this.set_hobby_isCheckAll(false)
 			this.set_checked_hobbys_id('')
 			this.set_checked_hobbys_name('')
@@ -220,7 +219,7 @@
 				})
 			},
 			submit(){
-				this.form.interest = this.checked_hobbys_id || 0
+				this.form.interest = 0
 				if(this.netUrl){
 					let url  = this.netUrl.split('?')[0]
 					var strRegex = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
@@ -249,7 +248,7 @@
 					cityCode,
 					homeBigImgUrl,
 					homeTopImgUrl,
-					interest,
+					interest:0, 
 					rangeType,
 					releaseTime,
 					releasesNumber,
@@ -263,7 +262,11 @@
 						 minNum
 					].toString()
 				}
-				this.$request('/api/goodLuck','post',param).then(res => {
+				uni.showLoading({
+					title:'加载中'
+				})
+				this.$request('/api/goodLuck','post',encodeURIComponent(JSON.stringify(param))).then(res => {
+					uni.hideLoading()
 					if(res.code == 200){
 						if(uni.getSystemInfoSync().platform == 'android'){
 							uni.showModal({
@@ -337,11 +340,11 @@
 										title:'很遗憾,订单支付失败!',
 										content:'如有疑问,请联系客服',
 										showCancel:false,
-										success: () => {
-											uni.navigateBack({
-												delta:1
-											})
-										}
+										// success: () => {
+										// 	uni.navigateBack({
+										// 		delta:1
+										// 	})
+										// }
 									})
 									console.log('fail:' + JSON.stringify(err));
 						    }
@@ -544,6 +547,8 @@
 			}
 			.rate{
 				color: #fff;
+				height: 40rpx;
+				line-height: 40rpx;
 				font-size: 28rpx;
 				margin-left: 20rpx;
 				margin-top: -4rpx;
@@ -581,6 +586,7 @@
 		.xy{
 			color: #51a3f0;
 			height: 40rpx;
+			line-height: 40rpx;
 			font-size: 22rpx;
 			border-radius: 20rpx;
 			background-color: #fff;

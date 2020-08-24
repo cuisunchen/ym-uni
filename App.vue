@@ -6,9 +6,9 @@ export default {
 		plus.screen.lockOrientation('portrait-primary');   //  控制app竖屏正方向锁死
 		// #endif
 	},
-	onShow: function() {
+	onShow() {
 		console.log('App Show');
-		this.getLocation()
+		var pages = getCurrentPages()
 		const userInfo = uni.getStorageSync('userInfo');
 		const token = uni.getStorageSync('token');
 		if(!token){
@@ -16,6 +16,11 @@ export default {
 				url:'./pages/subPages/login/login'
 			})
 		}
+		if(pages.length == 0){
+			return
+		}
+		this.getLocation()
+		
 	},
 	onHide: function() {
 		console.log('App Hide');
@@ -36,10 +41,33 @@ export default {
 								data: JSON.stringify(ops.data.result.addressComponent)
 							})
 						},
-						fail: function (resq) {
-							this.showToast("获取地址失败,请退出重试")
+						fail: (resq) => {
+							// #ifndef H5
+							uni.showModal({
+								title:'提示',
+								showCancel:false,
+								confirmText:'重新获取',
+								content:'获取地址失败,请重新获取',
+								success:()=>{
+									this.getLocation()
+								},
+							})
+							// #endif
 						}
 					})
+				},
+				fail: (resq) => {
+					// #ifndef H5
+					uni.showModal({
+						title:'提示',
+						showCancel:false,
+						confirmText:'重新获取',
+						content:'获取地址失败,请重新获取',
+						success:()=>{
+							this.getLocation()
+						},
+					})
+					// #endif
 				}
 			});
 		},

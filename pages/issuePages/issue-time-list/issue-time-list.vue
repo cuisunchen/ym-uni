@@ -14,7 +14,7 @@
 			</view>
 		</view>
 		
-		<view class="noticeBox flex">
+		<view class="noticeBox flex flex">
 			<view class="label">
 				建议:
 			</view>
@@ -219,6 +219,7 @@
 		border-radius: 10rpx;
 		.label{
 			color: blue;
+			line-height: 18px;
 			margin-left: 30rpx;
 		}
 		/deep/ .uni-noticebar{
@@ -256,10 +257,14 @@
 				.index{
 					width: 40rpx;
 					height: 40rpx;
+					line-height: 40rpx;
 					color: #fff;
 					margin-right: 20rpx;
 					border-radius: 6rpx;
 					background-color: green;
+				}
+				.date{
+					line-height: 40rpx;
 				}
 				/deep/ .uni-checkbox-input{
 					width: 36rpx;

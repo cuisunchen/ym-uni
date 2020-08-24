@@ -2,7 +2,7 @@
     "name" : "今日友米",
     "appid" : "__UNI__4DF39C1",
     "description" : "手赚app平台",
-    "versionName" : "1.0.1",
+    "versionName" : "1.0.7",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
@@ -100,7 +100,8 @@
                         "retina40l" : "/Users/apple/Desktop/logos/logo1024.png",
                         "retina35" : "/Users/apple/Desktop/logos/logo1024.png"
                     }
-                }
+                },
+                "androidStyle" : "common"
             }
         },
         "splashscreen" : {

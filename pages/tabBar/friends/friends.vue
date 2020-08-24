@@ -1,6 +1,6 @@
 <template>
 	<view class="friendEarnPage page flex-column">
-		<view class="top">
+		<view class="top flex-shrink">
 			<view class="friendsNum">您邀请到{{myInfo.friend}}位好友</view>
 			<view class="profitBox flex align-center">
 				<uni-tag :text="myInfo.le" size="small" type="error"></uni-tag>
@@ -28,7 +28,7 @@
 					<view class="img">
 						<image src="../../../static/xiaox.png" mode=""></image>
 					</view>
-					<view class="notice flex1">
+					<view class="notice flex1 flex">
 						<uni-notice-bar scrollable="true" :speed="50" text="分享应用邀请好友,好友每天的收益,您都有对应的返利,为您当日的米圈收益~~~"></uni-notice-bar>
 					</view>
 					<view class="shareBtn" @click="goShare">去分享</view>
@@ -77,6 +77,7 @@
 			uni.showLoading({
 				title:'加载中'
 			})
+			
 			this.getDatas()
 		},
 		onPullDownRefresh() {
@@ -173,22 +174,25 @@
 			 background-color: #B4C386
 		}
 		.profitBox{
-			 position: absolute;
-			 right: 20rpx;
-			 bottom: 20rpx;
-			 .i-tags{
-					margin-right: 10rpx
-			 }
-			 .profit{
-					font-size: 28rpx;
-					color: rgb(206,177,120);
-			 }
-			 /deep/ .uni-tag--small{
-					height: 14px;
-					padding: 0px 4px;
-					line-height: 14px;
-					margin-right: 10rpx;
-			 }
+			position: absolute;
+			right: 20rpx;
+			bottom: 20rpx;
+			height: 14px;
+			.i-tags{
+				margin-right: 10rpx
+			}
+			.profit{
+				height: 14px;
+				line-height: 14px;
+				font-size: 13px;
+				color: rgb(206,177,120);
+			}
+			/deep/ .uni-tag--small{
+				height: 14px;
+				line-height: 14px;
+				padding: 0px 4px;
+				margin-right: 10rpx;
+			}
 		}
 	}
 	.rankingBox{
@@ -213,18 +217,22 @@
 				}
 			}
 			.userInfo{
+				line-height: 60rpx;
 				.img{
 					width: 60rpx;
 					height: 60rpx;
 				}
 				.mobile{
 					font-size: 32rpx;
-					margin: 0 20rpx;
+					line-height: 60rpx;
+					margin: 4rpx 20rpx 0;
 					color: rgb(233, 203, 165)
 				}
 				.tag{
 					display: inline-block;
 					color: #fff;
+					height: 36rpx;
+					line-height: 36rpx;
 					padding: 0 10rpx;
 					border-radius: 8rpx;
 					background-color: rgb(233, 203, 165)
@@ -324,6 +332,7 @@
 				.index{
 					font-size: 28rpx;
 					color: #666;
+					line-height: 80rpx;
 				}
 			}
 		}

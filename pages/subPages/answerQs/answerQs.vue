@@ -62,6 +62,7 @@
 					reply: this.selectedVal
 				}
 				this.$request('/api/view/replyQA','post',param).then(res => {
+					console.log(res)
 						this.submitLoading = false
 						this.dataObj.tags = '已读'
 						// console.log(res)

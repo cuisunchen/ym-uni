@@ -257,7 +257,7 @@ const validate = {
 				}
 			}else
 			if(key == 'cityCode'){
-				if(!value.length){
+				if(value && value.length<0){
 					showToast('请选择发布位置')
 					return false
 					break
